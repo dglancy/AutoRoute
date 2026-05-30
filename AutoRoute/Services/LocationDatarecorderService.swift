@@ -8,19 +8,21 @@
 import Foundation
 import Combine
 import CoreLocation
+import Observation
 import SwiftData
 import os.log
 
 // MARK: - Location Data Recorder Service
 
 @MainActor
-final class LocationDataRecorderService: ObservableObject {
+@Observable
+final class LocationDataRecorderService {
 
   // MARK: - Properties
 
-  private let locationService: LocationService
-  private let modelContext: ModelContext
-  private var locationCancellable: AnyCancellable?
+  @ObservationIgnored private let locationService: LocationService
+  @ObservationIgnored private let modelContext: ModelContext
+  @ObservationIgnored private var locationCancellable: AnyCancellable?
   private(set) var route: Route?
 
   // MARK: - Lifecycle

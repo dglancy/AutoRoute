@@ -57,7 +57,18 @@ final class HomeViewModel {
     guard !recent.isEmpty else { return nil }
     let totalMetres = recent.reduce(0.0) { $0 + $1.distanceMetres }
     let count = recent.count
-    return "\(count) \(count == 1 ? "route" : "routes") · \(totalMetres.localizedDistanceString()) in the last 30 days"
+    let distance = totalMetres.localizedDistanceString()
+    if count == 1 {
+      return String(
+        localized: "\(count) route · \(distance) in the last 30 days",
+        comment: "Home screen summary (singular): one route and total distance over the last 30 days"
+      )
+    } else {
+      return String(
+        localized: "\(count) routes · \(distance) in the last 30 days",
+        comment: "Home screen summary (plural): number of routes and total distance over the last 30 days"
+      )
+    }
   }
 
   private func sectionTitle(for date: Date, today: Date, calendar: Calendar) -> String {
@@ -65,10 +76,9 @@ final class HomeViewModel {
     let daysDiff = calendar.dateComponents([.day], from: routeDay, to: today).day ?? 0
 
     switch daysDiff {
-    case 0:
-      return "Today"
-    case 1:
-      return "Yesterday"
+    case 0, 1:
+      let title = date.formatted(.relative(presentation: .named))
+      return title.prefix(1).localizedCapitalized + title.dropFirst()
     case 2...6:
       return date.formatted(.dateTime.weekday(.wide))
     default:

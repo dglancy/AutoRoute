@@ -7,25 +7,27 @@
 
 import CoreLocation
 import Foundation
+import Observation
 import SwiftData
 import Combine
 import os.log
 
 @MainActor
-final class RouteService: ObservableObject {
+@Observable
+final class RouteService {
 
   // MARK: - Properties
 
-  @Published private(set) var route: Route?
-  @Published private(set) var currentSpeedMs: Double?
+  private(set) var route: Route?
+  private(set) var currentSpeedMs: Double?
 
   var isRecording: Bool { route?.isRecording ?? false }
   var isPaused: Bool { route?.isPaused ?? false }
 
-  private let modelContext: ModelContext
-  private let locationService: LocationService
-  private let locationDataRecorder: LocationDataRecorderService
-  private var speedCancellable: AnyCancellable?
+  @ObservationIgnored private let modelContext: ModelContext
+  @ObservationIgnored private let locationService: LocationService
+  @ObservationIgnored private let locationDataRecorder: LocationDataRecorderService
+  @ObservationIgnored private var speedCancellable: AnyCancellable?
 
   // MARK: - Lifecycle
 

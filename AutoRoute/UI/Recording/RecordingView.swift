@@ -12,7 +12,7 @@ struct RecordingView: View {
 
   // MARK: - Properties
 
-  @EnvironmentObject private var routeService: RouteService
+  @Environment(RouteService.self) private var routeService
   @Environment(\.dismiss) private var dismiss
 
   // MARK: - Body
@@ -291,6 +291,6 @@ private struct StatColumn: View {
     initialRoute: route
   )
   RecordingView()
-    .environmentObject(routeService)
+    .environment(routeService)
     .modelContainer(container)
 }

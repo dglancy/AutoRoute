@@ -13,9 +13,9 @@ struct AutoRouteApp: App {
 
   // MARK: - Properties
 
-  @StateObject private var locationService: LocationService
-  @StateObject private var locationDataRecorder: LocationDataRecorderService
-  @StateObject private var routeService: RouteService
+  @State private var locationService: LocationService
+  @State private var locationDataRecorder: LocationDataRecorderService
+  @State private var routeService: RouteService
 
   private let modelContainer: ModelContainer
 
@@ -28,14 +28,14 @@ struct AutoRouteApp: App {
     modelContainer = Self.createModelContainer(isUITesting: isUITesting)
 
     let locationService = Self.setupLocationService()
-    _locationService = StateObject(wrappedValue: locationService)
+    _locationService = State(initialValue: locationService)
 
     let locationDataRecorder = Self.setupLocationDataRecorderService(locationService: locationService, modelContext: modelContainer.mainContext)
-    _locationDataRecorder = StateObject(wrappedValue: locationDataRecorder)
+    _locationDataRecorder = State(initialValue: locationDataRecorder)
 
     let routeService = Self.setupRouteService(modelContext: modelContainer.mainContext, locationService: locationService,
                                              locationDataRecorder: locationDataRecorder)
-    _routeService = StateObject(wrappedValue: routeService)
+    _routeService = State(initialValue: routeService)
 
     if isUITesting {
       Log.lifecycle.info("Running in UI Testing mode")
@@ -48,7 +48,7 @@ struct AutoRouteApp: App {
   var body: some Scene {
     WindowGroup {
       HomeView()
-        .environmentObject(routeService)
+        .environment(routeService)
     }
     .modelContainer(modelContainer)
   }

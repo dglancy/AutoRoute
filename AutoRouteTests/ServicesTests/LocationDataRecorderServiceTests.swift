@@ -51,7 +51,6 @@ final class LocationDataRecorderServiceTests: SwiftDataBaseTestCase {
   @Test
   func doesNotPersistLocationsBeforeRecordingStarts() async throws {
     let locationService = LocationService()
-    let recorder = LocationDataRecorderService(locationService: locationService, modelContext: context!)
 
     let location = CLLocation(
       coordinate: CLLocationCoordinate2D(latitude: 55.0, longitude: -4.0), altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5,

@@ -8,6 +8,7 @@
 import Foundation
 import CoreLocation
 import Combine
+import Observation
 
 // MARK: - Location Service Status
 
@@ -18,14 +19,15 @@ enum LocationServiceStatus {
 // MARK: - Location Service
 
 @MainActor
-final class LocationService: NSObject, ObservableObject, CLLocationManagerDelegate {
+@Observable
+final class LocationService: NSObject, CLLocationManagerDelegate {
 
   // MARK: - Properties
 
-  @Published var status: LocationServiceStatus = .stopped
+  var status: LocationServiceStatus = .stopped
 
-  let locationPublisher = PassthroughSubject<CLLocation, Never>()
-  private let manager = CLLocationManager()
+  @ObservationIgnored let locationPublisher = PassthroughSubject<CLLocation, Never>()
+  @ObservationIgnored private let manager = CLLocationManager()
 
   // MARK: - Computed properties
 

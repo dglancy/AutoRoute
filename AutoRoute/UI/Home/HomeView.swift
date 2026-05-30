@@ -13,7 +13,7 @@ struct HomeView: View {
   // MARK: - Properties
 
   @Environment(\.modelContext) private var modelContext
-  @EnvironmentObject private var routeService: RouteService
+  @Environment(RouteService.self) private var routeService
   @Query(sort: \Route.startedAt, order: .reverse) private var routes: [Route]
   @State private var viewModel = HomeViewModel()
   @State private var showingRecordingScreen = false
@@ -38,7 +38,7 @@ struct HomeView: View {
     }
     .fullScreenCover(isPresented: $showingRecordingScreen) {
       RecordingView()
-        .environmentObject(routeService)
+        .environment(routeService)
     }
   }
 
@@ -244,5 +244,5 @@ private struct RecordingDot: View {
 
   return HomeView()
     .modelContainer(container)
-    .environmentObject(routeService)
+    .environment(routeService)
 }

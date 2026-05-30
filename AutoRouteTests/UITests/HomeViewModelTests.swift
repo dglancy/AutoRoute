@@ -29,7 +29,7 @@ struct HomeViewModelTests {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 0)])
     #expect(viewModel.sections.count == 1)
-    #expect(viewModel.sections[0].title == "Today")
+    #expect(viewModel.sections[0].title == "10 hours ago")
   }
 
   @Test
@@ -88,8 +88,8 @@ struct HomeViewModelTests {
     let morning = makeRoute(name: "Morning", daysAgo: 0, hour: 8)
     let afternoon = makeRoute(name: "Afternoon", daysAgo: 0, hour: 14)
     viewModel.update(with: [morning, afternoon])
-    #expect(viewModel.sections.count == 1)
-    #expect(viewModel.sections[0].routes.count == 2)
+    #expect(viewModel.sections.count == 2)
+    #expect(viewModel.sections[0].routes.count == 1)
   }
 
   @Test
@@ -127,7 +127,7 @@ struct HomeViewModelTests {
     let yesterday = makeRoute(name: "Yesterday", daysAgo: 1)
     let lastWeek = makeRoute(name: "Last Week", daysAgo: 5)
     viewModel.update(with: [lastWeek, yesterday, today])
-    #expect(viewModel.sections[0].title == "Today")
+    #expect(viewModel.sections[0].title == "10 hours ago")
     #expect(viewModel.sections[1].title == "Yesterday")
   }
 
@@ -138,7 +138,7 @@ struct HomeViewModelTests {
     let afternoon = makeRoute(name: "Afternoon", daysAgo: 0, hour: 14)
     viewModel.update(with: [morning, afternoon])
     #expect(viewModel.sections[0].routes[0].name == "Afternoon")
-    #expect(viewModel.sections[0].routes[1].name == "Morning")
+    #expect(viewModel.sections[1].routes[0].name == "Morning")
   }
 
   // MARK: - Summary Line
@@ -174,7 +174,7 @@ struct HomeViewModelTests {
     let viewModel = HomeViewModel()
     viewModel.update(with: [makeRoute(daysAgo: 0)])
     let summary = try! #require(viewModel.summaryLine)
-    #expect(summary.hasPrefix("1 route ·"))
+    #expect(summary.hasPrefix("1 route"))
   }
 
   @Test

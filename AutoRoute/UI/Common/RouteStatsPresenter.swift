@@ -38,7 +38,7 @@ struct RouteStatsPresenter {
 
   var startTimeLabel: String {
     let datePart = route.startedAt.abbreviatedMonthAndDay()
-    let timePart = route.startedAt.clockTime()
+    let timePart = route.startedAt.clockString()
     return "\(datePart) · \(timePart)"
   }
 }

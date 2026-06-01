@@ -38,7 +38,8 @@ jobs:
             -destination 'platform=iOS Simulator,name=iPhone 17,arch=arm64' \
             -testPlan AutoRoute \
             -skipPackagePluginValidation \
-            -resultBundlePath TestResults.xcresult
+            -resultBundlePath TestResults.xcresult \
+            | xcpretty
 
       - name: Upload test results
         if: failure()

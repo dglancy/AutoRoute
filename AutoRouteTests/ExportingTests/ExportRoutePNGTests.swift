@@ -16,9 +16,10 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
   // MARK: - Error descriptions
 
   @Test
-  func snapshotFailureErrorIncludesMessage() {
-    let error = ExportRoutePNGError.snapshotFailure("Connection timeout")
-    #expect(error.errorDescription?.contains("Connection timeout") == true)
+  func snapshotFailureHasUserFacingDescription() {
+    let error = ExportRoutePNGError.snapshotFailure
+    #expect(error.errorDescription != nil)
+    #expect(error.errorDescription?.isEmpty == false)
   }
 
   @Test
@@ -29,9 +30,10 @@ final class ExportRoutePNGTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func fileWriteFailureErrorIncludesMessage() {
-    let error = ExportRoutePNGError.fileWriteFailure("Disk full")
-    #expect(error.errorDescription?.contains("Disk full") == true)
+  func fileWriteFailureHasUserFacingDescription() {
+    let error = ExportRoutePNGError.fileWriteFailure
+    #expect(error.errorDescription != nil)
+    #expect(error.errorDescription?.isEmpty == false)
   }
 
   // MARK: - MapSize dimensions

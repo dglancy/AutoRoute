@@ -86,6 +86,12 @@
 			path = AutoRouteUITests;
 			sourceTree = "<group>";
 		};
+		6D8311CF2FCD81C40036D01E /* workflows */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			name = workflows;
+			path = .github/workflows;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,7 @@
 				6D47A54E2FCAE68700E6C7B7 /* CLAUDE.md */,
 				6D47A54F2FCAE68700E6C7B7 /* LICENSE */,
 				6D47A5502FCAE68700E6C7B7 /* README.md */,
+				6D8311CF2FCD81C40036D01E /* workflows */,
 				6D47A5122FCAD20600E6C7B7 /* AutoRoute */,
 				6D47A5222FCAD20800E6C7B7 /* AutoRouteTests */,
 				6D47A52C2FCAD20800E6C7B7 /* AutoRouteUITests */,

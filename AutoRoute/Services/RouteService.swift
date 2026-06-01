@@ -11,7 +11,6 @@ import Foundation
 import Observation
 import SwiftData
 import Combine
-import os.log
 
 @MainActor
 @Observable

@@ -8,7 +8,6 @@
 import Foundation
 import MapKit
 import UIKit
-import os.log
 
 // MARK: - PNG export service
 

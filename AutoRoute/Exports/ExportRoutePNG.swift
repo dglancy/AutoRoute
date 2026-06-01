@@ -13,19 +13,18 @@ import os.log
 // MARK: - PNG export error
 
 enum ExportRoutePNGError: LocalizedError {
-  case snapshotFailure(String)
+  case snapshotFailure
   case dataPreparationFailure
-  case fileWriteFailure(String)
+  case fileWriteFailure
 
   var errorDescription: String? {
     switch self {
-    case .snapshotFailure(let message):
-      return String(localized: "Failed to create PNG. Please try again.\n\nDetails: \(message)", comment: "Export error: map snapshot failed")
+    case .snapshotFailure:
+      return String(localized: "Failed to create PNG. Please try again.", comment: "Export error: map snapshot failed")
     case .dataPreparationFailure:
       return String(localized: "Failed to prepare PNG data for sharing.", comment: "Export error: UIImage could not produce PNG data")
-    case .fileWriteFailure(let message):
-      return String(localized: "Failed to save PNG. Please try again.\n\nDetails: \(message)",
-                    comment: "Export error: writing PNG file to disk failed")
+    case .fileWriteFailure:
+      return String(localized: "Failed to save PNG. Please try again.", comment: "Export error: writing PNG file to disk failed")
     }
   }
 }
@@ -75,7 +74,7 @@ final class ExportRoutePNG: ExportingRoute {
       return fileURL
     } catch {
       Log.ui.error("Failed to write PNG for route: \(route.startedAt) — error: \(error.localizedDescription)")
-      throw ExportRoutePNGError.fileWriteFailure(error.localizedDescription)
+      throw ExportRoutePNGError.fileWriteFailure
     }
   }
 
@@ -184,12 +183,12 @@ final class ExportRoutePNG: ExportingRoute {
       MKMapSnapshotter(options: options).start { snapshot, error in
         if let error {
           Log.ui.error("Failed to create PNG snapshot for route: \(route.startedAt) — error: \(error.localizedDescription)")
-          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure(error.localizedDescription))
+          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure)
           return
         }
 
         guard let snapshot else {
-          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure("Unknown error"))
+          continuation.resume(throwing: ExportRoutePNGError.snapshotFailure)
           return
         }
 

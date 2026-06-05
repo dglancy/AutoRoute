@@ -5,7 +5,6 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
-import BackgroundTasks
 import CoreLocation
 import Foundation
 import Observation
@@ -17,8 +16,6 @@ import Combine
 final class RouteService {
 
   // MARK: - Properties
-
-  static let pauseTimeoutTaskIdentifier = "com.targatrips.AutoRoute.pause-timeout"
 
   private(set) var route: Route?
   private(set) var currentSpeedMs: Double?
@@ -34,7 +31,6 @@ final class RouteService {
   @ObservationIgnored private var speedCancellable: AnyCancellable?
   @ObservationIgnored private var startGeocodeCancellable: AnyCancellable?
   @ObservationIgnored private var networkCancellable: AnyCancellable?
-  @ObservationIgnored private var pauseTimeoutTimer: Timer?
 
   // MARK: - Lifecycle
 
@@ -92,7 +88,6 @@ final class RouteService {
   }
 
   func endRoute() {
-    cancelPauseTimeout()
     speedCancellable = nil
     startGeocodeCancellable = nil
     locationService.stop()
@@ -121,25 +116,15 @@ final class RouteService {
     locationService.pause()
     route?.status = .paused
     route?.pauseStartedAt = Date()
-    schedulePauseTimeout()
   }
 
   func resumeRoute() {
-    cancelPauseTimeout()
     if let route, let pauseStart = route.pauseStartedAt {
       route.pausedDurationSeconds += Date().timeIntervalSince(pauseStart)
       route.pauseStartedAt = nil
     }
     route?.status = .recording
     locationService.resume()
-  }
-
-  func checkAndAutoFinishIfTimedOut() {
-    guard isPaused,
-          let route = route,
-          let pauseStartedAt = route.pauseStartedAt,
-          Date().timeIntervalSince(pauseStartedAt) >= kPauseTimeoutInterval else { return }
-    endRoute()
   }
 
   func checkAndRetryNilPlaceNamesForFinishedRoutes() async {
@@ -177,28 +162,6 @@ final class RouteService {
       saveModelContext()
     }
     await checkAndRetryNilPlaceNamesForFinishedRoutes()
-  }
-
-  private func schedulePauseTimeout() {
-    let request = BGAppRefreshTaskRequest(identifier: Self.pauseTimeoutTaskIdentifier)
-    request.earliestBeginDate = Date().addingTimeInterval(kPauseTimeoutInterval)
-    do {
-      try BGTaskScheduler.shared.submit(request)
-    } catch {
-      Log.lifecycle.error("Failed to schedule pause timeout background task: \(error)")
-    }
-
-    pauseTimeoutTimer = Timer.scheduledTimer(withTimeInterval: kPauseTimeoutInterval, repeats: false) { [weak self] _ in
-      Task { @MainActor [weak self] in
-        self?.checkAndAutoFinishIfTimedOut()
-      }
-    }
-  }
-
-  private func cancelPauseTimeout() {
-    BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: Self.pauseTimeoutTaskIdentifier)
-    pauseTimeoutTimer?.invalidate()
-    pauseTimeoutTimer = nil
   }
 
   private func routeNameForCurrentTime() -> String {

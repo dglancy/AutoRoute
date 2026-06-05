@@ -14,11 +14,6 @@ struct ConstantsTests {
   // MARK: - App
 
   @Test
-  func appBundleIdHasCorrectPrefix() {
-    #expect(kAppBundleId.hasPrefix("com.targatrips.Driveline"))
-  }
-
-  @Test
   func gpxCreatorHasCorrectSuffix() {
     #expect(kGPXCreator.hasSuffix("Driveline for iOS"))
   }

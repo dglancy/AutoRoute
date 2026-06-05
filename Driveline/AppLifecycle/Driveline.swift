@@ -5,7 +5,6 @@
 //  Created by Damien Glancy on 30/05/2026.
 //
 
-import BackgroundTasks
 import SwiftUI
 import SwiftData
 
@@ -39,7 +38,6 @@ struct Driveline: App {
     _routeService = State(initialValue: routeService)
 
     Self.registerIntentDependencies(routeService: routeService)
-    Self.registerBGTasks(routeService: routeService)
 
     if isUITesting {
       Log.lifecycle.info("Running in UI Testing mode")
@@ -55,7 +53,6 @@ struct Driveline: App {
         .environment(routeService)
         .onChange(of: scenePhase) { _, newPhase in
           guard newPhase == .active else { return }
-          routeService.checkAndAutoFinishIfTimedOut()
           Task { await routeService.checkAndRetryNilPlaceNamesForFinishedRoutes() }
         }
     }
@@ -107,22 +104,6 @@ struct Driveline: App {
                         locationDataRecorder: locationDataRecorder,
                         networkMonitorService: networkMonitorService,
                         initialRoute: activeRoute)
-  }
-
-  // MARK: - Background Tasks
-
-  private static func registerBGTasks(routeService: RouteService) {
-    Log.lifecycle.info("Registering background tasks")
-    BGTaskScheduler.shared.register(
-      forTaskWithIdentifier: RouteService.pauseTimeoutTaskIdentifier,
-      using: .main
-    ) { task in
-      task.expirationHandler = { task.setTaskCompleted(success: false) }
-      Task { @MainActor in
-        routeService.checkAndAutoFinishIfTimedOut()
-        task.setTaskCompleted(success: true)
-      }
-    }
   }
 
   // MARK: - App Intents

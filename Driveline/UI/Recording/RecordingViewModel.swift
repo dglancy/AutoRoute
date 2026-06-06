@@ -37,14 +37,6 @@ final class RecordingViewModel {
     Measurement(value: distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
   }
 
-  var speedValue: String {
-    guard let ms = driveService.currentSpeedMs else { return kDashString }
-    return Measurement(value: ms, unit: UnitSpeed.metersPerSecond).localizedSpeedValueString()
-  }
-
-  var speedUnit: String {
-    Measurement(value: driveService.currentSpeedMs ?? 0, unit: UnitSpeed.metersPerSecond).localizedSpeedUnitSymbol()
-  }
   var positionCount: Int { driveService.drive?.positions?.count ?? 0 }
 
   var formattedPositionCount: String {

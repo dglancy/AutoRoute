@@ -152,7 +152,7 @@ final class HomeViewModel {
   }
 
   private func buildSummaryLine(from drives: [Drive]) -> String? {
-    let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now)!
+    let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
     let recent = drives.filter { $0.startedAt >= cutoff }
     guard !recent.isEmpty else { return nil }
     let totalMetres = recent.reduce(0.0) { $0 + $1.distanceMetres }

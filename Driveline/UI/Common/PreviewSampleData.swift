@@ -22,8 +22,8 @@ enum PreviewSampleData {
     let now = Date.now
 
     func date(daysAgo: Int, hour: Int, minute: Int = 0) -> Date {
-      let day = calendar.date(byAdding: .day, value: -daysAgo, to: now)!
-      return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day)!
+      let day = calendar.date(byAdding: .day, value: -daysAgo, to: now) ?? now
+      return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day) ?? now
     }
 
     func position(lat: Double, lon: Double, at timestamp: Date, speed: Double = 14) -> Position {
@@ -65,8 +65,8 @@ enum PreviewSampleData {
     let now = Date.now
 
     func date(daysAgo: Int, hour: Int, minute: Int = 0) -> Date {
-      let day = calendar.date(byAdding: .day, value: -daysAgo, to: now)!
-      return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day)!
+      let day = calendar.date(byAdding: .day, value: -daysAgo, to: now) ?? now
+      return calendar.date(bySettingHour: hour, minute: minute, second: 0, of: day) ?? now
     }
 
     func pos(lat: Double, lon: Double, at timestamp: Date) -> Position {

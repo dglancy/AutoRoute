@@ -37,11 +37,12 @@ struct HomeView: View {
           }
           viewModel.showingRecordingScreen = isRecording
         }
+        .onAppear { viewModel.modelContext = modelContext }
     }
     .modifier(RecordingScreenModifier(driveService: driveService, viewModel: viewModel))
-    .modifier(DeleteDrivesAlertModifier(viewModel: viewModel, modelContext: modelContext))
+    .modifier(DeleteDrivesAlertModifier(viewModel: viewModel))
     .modifier(StartDriveErrorAlertModifier(viewModel: viewModel))
-    .modifier(MergeDrivesSheetModifier(viewModel: viewModel, modelContext: modelContext))
+    .modifier(MergeDrivesSheetModifier(viewModel: viewModel))
   }
 
   // MARK: - Private Views
@@ -103,7 +104,7 @@ struct HomeView: View {
               }
             }
             .onDelete(perform: viewModel.isSelectMode ? nil : { indexSet in
-              viewModel.deleteDrives(at: indexSet, in: section, using: modelContext)
+              viewModel.deleteDrives(at: indexSet, in: section)
             })
           }
         }
@@ -198,7 +199,6 @@ private struct RecordingScreenModifier: ViewModifier {
 
 private struct DeleteDrivesAlertModifier: ViewModifier {
   @Bindable var viewModel: HomeViewModel
-  let modelContext: ModelContext
 
   func body(content: Content) -> some View {
     content.alert(
@@ -208,7 +208,7 @@ private struct DeleteDrivesAlertModifier: ViewModifier {
       Button.delete {
         let selected = viewModel.selectedDrives(from: viewModel.sections)
         viewModel.exitSelectMode()
-        viewModel.deleteDrives(selected, using: modelContext)
+        viewModel.deleteDrives(selected)
       }
       Button.cancel()
     } message: {
@@ -234,13 +234,12 @@ private struct StartDriveErrorAlertModifier: ViewModifier {
 
 private struct MergeDrivesSheetModifier: ViewModifier {
   @Bindable var viewModel: HomeViewModel
-  let modelContext: ModelContext
 
   func body(content: Content) -> some View {
     content.sheet(isPresented: $viewModel.showingMergeSheet) {
       if viewModel.drivesToMerge.count == 2 {
         MergeDrivesView(drives: viewModel.drivesToMerge) { orderedDrives, mergedName in
-          viewModel.mergeDrives(orderedDrives: orderedDrives, mergedName: mergedName, using: modelContext)
+          viewModel.mergeDrives(orderedDrives: orderedDrives, mergedName: mergedName)
         }
       }
     }

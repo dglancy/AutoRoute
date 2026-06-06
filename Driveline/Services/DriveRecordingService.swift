@@ -48,7 +48,7 @@ final class DriveRecordingService {
 
     networkCancellable = networkMonitorService.connectivityRestoredPublisher
       .sink { [weak self] in
-        Task { [weak self] in
+        Task { 
           guard let self else { return }
           await self.retryNilPlaceNamesOnConnectivity()
         }
@@ -159,6 +159,10 @@ final class DriveRecordingService {
   }
 
   private func saveModelContext() {
-    modelContext.safeSave(onFailure: { Log.ui.error("Failed to save model context: \($0.localizedDescription)") })
+    do {
+      try modelContext.save()
+    } catch {
+      Log.ui.error("Failed to save model context: \(error.localizedDescription)")
+    }
   }
 }

@@ -68,10 +68,11 @@ struct DriveDetailView: View {
       }
     }
     .toolbar(.hidden, for: .navigationBar)
+    .onAppear { viewModel.modelContext = modelContext }
     .modifier(FullScreenMapModifier(viewModel: viewModel))
     .modifier(ExportShareSheetModifier(viewModel: viewModel))
     .modifier(ExportErrorAlertModifier(viewModel: viewModel))
-    .modifier(DeleteDriveAlertModifier(viewModel: viewModel, modelContext: modelContext, dismiss: { dismiss() }))
+    .modifier(DeleteDriveAlertModifier(viewModel: viewModel, dismiss: { dismiss() }))
     .modifier(EditDriveSheetModifier(viewModel: viewModel))
     .modifier(DriveOptionsDialogModifier(viewModel: viewModel))
   }
@@ -232,7 +233,6 @@ private struct ExportErrorAlertModifier: ViewModifier {
 
 private struct DeleteDriveAlertModifier: ViewModifier {
   @Bindable var viewModel: DriveDetailViewModel
-  let modelContext: ModelContext
   let dismiss: () -> Void
 
   func body(content: Content) -> some View {
@@ -241,7 +241,7 @@ private struct DeleteDriveAlertModifier: ViewModifier {
       isPresented: $viewModel.showingDeleteConfirmation
     ) {
       Button.delete {
-        viewModel.deleteDrive(using: modelContext)
+        viewModel.deleteDrive()
         dismiss()
       }
       Button.cancel()

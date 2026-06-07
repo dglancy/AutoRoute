@@ -6,6 +6,7 @@
 //
 
 import ActivityKit
+import AppIntents
 import Foundation
 import SwiftUI
 import WidgetKit
@@ -85,7 +86,7 @@ private struct DriveActivityLockScreenView: View {
   }
 
   private var finishButton: some View {
-    Link(destination: URL(string: "driveline://finish")!) {
+    Button(intent: FinishDriveIntent()) {
       Text(String(localized: "Finish Drive", comment: "Live Activity finish drive button"))
         .font(.subheadline.weight(.semibold))
         .foregroundStyle(.white)
@@ -94,6 +95,7 @@ private struct DriveActivityLockScreenView: View {
         .background(Color.brand)
         .clipShape(RoundedRectangle(cornerRadius: 10))
     }
+    .buttonStyle(.plain)
   }
 }
 
@@ -165,7 +167,7 @@ private struct DriveActivityExpandedBottomView: View {
           .foregroundStyle(.primary)
       }
       Spacer()
-      Link(destination: URL(string: "driveline://finish")!) {
+      Button(intent: FinishDriveIntent()) {
         Text(String(localized: "Finish Drive", comment: "Live Activity expanded finish drive button"))
           .font(.caption.weight(.semibold))
           .foregroundStyle(.white)
@@ -174,6 +176,7 @@ private struct DriveActivityExpandedBottomView: View {
           .background(Color.brand)
           .clipShape(Capsule())
       }
+      .buttonStyle(.plain)
     }
     .padding(.horizontal, 4)
     .padding(.bottom, 6)

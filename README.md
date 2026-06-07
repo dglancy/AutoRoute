@@ -22,6 +22,7 @@ Driveline grew out of a personal need. I run [Targa Trips](https://www.targatrip
 - **Weather at departure and arrival** fetched via WeatherKit and shown on the drive detail screen, including condition, temperature, and a weather symbol. Apple Weather attribution is displayed as required.
 - **Minimal recording screen** showing elapsed time. There is no live map during recording; see below for why.
 - **Live Activity** on the Lock Screen and Dynamic Island showing elapsed time while a drive is in progress.
+- **Spotlight search** indexes every finished drive so you can find it by name, start location, or end location directly from the iOS home screen. Tapping a result opens straight to that drive's detail view.
 - **Localized** into US English, British English (also used in Australia and Ireland), French, German, and Dutch.
 
 ## Philosophy
@@ -67,6 +68,7 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 - WeatherKit for fetching weather conditions at the start and end of each drive
 - AppIntents for the Shortcuts actions (start and finish)
 - ActivityKit for the Live Activity shown on the Lock Screen and Dynamic Island during recording
+- CoreSpotlight for indexing drives so they appear in Spotlight search
 - CloudKit for iCloud sync of drives across devices
 - Combine for publishing location updates through the service layer
 

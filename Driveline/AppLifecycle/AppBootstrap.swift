@@ -9,6 +9,9 @@ import BackgroundTasks
 import Foundation
 import SwiftData
 
+// BGTask.setTaskCompleted(success:) is documented thread-safe; Sendable allows crossing actor boundaries.
+extension BGTask: @retroactive @unchecked Sendable {}
+
 @MainActor
 enum AppBootstrap {
 
@@ -90,11 +93,11 @@ enum AppBootstrap {
     return (try? modelContext.fetch(descriptor))?.first.flatMap { $0.status != .finished ? $0 : nil }
   }
 
-  private static func registerBGTasks(_ services: [any SweepServiceProtocol]) {
+  nonisolated private static func registerBGTasks(_ services: [any SweepServiceProtocol]) {
     services.forEach { registerBGTask($0) }
   }
 
-  private static func registerBGTask(_ service: any SweepServiceProtocol) {
+  nonisolated private static func registerBGTask(_ service: any SweepServiceProtocol) {
     BGTaskScheduler.shared.register(forTaskWithIdentifier: service.taskIdentifier, using: nil) { task in
       guard let processingTask = task as? BGProcessingTask else {
         task.setTaskCompleted(success: false)

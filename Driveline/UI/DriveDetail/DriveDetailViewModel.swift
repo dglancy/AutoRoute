@@ -84,6 +84,11 @@ final class DriveDetailViewModel {
   func deleteDrive() {
     guard let modelContext else { return }
     modelContext.delete(drive)
+    do {
+      try modelContext.save()
+    } catch {
+      Log.data.error("Failed to delete drive: \(error.localizedDescription)")
+    }
   }
 
   func shareDriveGPX() {

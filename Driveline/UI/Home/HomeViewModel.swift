@@ -106,9 +106,14 @@ final class HomeViewModel {
   }
 
   func deleteDrives(_ drives: [Drive]) {
+    guard let modelContext else { return }
     for drive in drives {
-      guard let modelContext else { return }
       modelContext.delete(drive)
+    }
+    do {
+      try modelContext.save()
+    } catch {
+      Log.data.error("Failed to delete drives: \(error.localizedDescription)")
     }
   }
 

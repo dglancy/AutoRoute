@@ -6,7 +6,7 @@
 //
 
 @MainActor
-protocol SweepServiceProtocol {
+protocol SweepServiceProtocol: Sendable {
   nonisolated var taskIdentifier: String { get }
   func sweep() async
 }

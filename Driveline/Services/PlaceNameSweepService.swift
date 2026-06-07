@@ -28,7 +28,7 @@ final class PlaceNameSweepService {
   // MARK: - Actions
 
   func sweep() async {
-    let cutoff = Date().addingTimeInterval(kDrivePlaceNameSweepCutoff)
+    let cutoff = Date().addingTimeInterval(Constants.Configuration.drivePlaceNameSweepCutoff)
     let descriptor = FetchDescriptor<Drive>(
       predicate: #Predicate<Drive> { drive in
         drive.startedAt >= cutoff

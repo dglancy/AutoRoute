@@ -119,8 +119,8 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
   nonisolated func isUsable(_ location: CLLocation) -> Bool {
     location.horizontalAccuracy >= 0 &&
-    location.horizontalAccuracy < kMinimumLocationAccuracy &&
-    -location.timestamp.timeIntervalSinceNow < kMaxLocationAge
+    location.horizontalAccuracy < Constants.Configuration.minimumLocationAccuracy &&
+    -location.timestamp.timeIntervalSinceNow < Constants.Configuration.maxLocationAge
   }
 
 }

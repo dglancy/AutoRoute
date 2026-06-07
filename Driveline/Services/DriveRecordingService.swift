@@ -134,7 +134,7 @@ final class DriveRecordingService {
   }
 
   private func findRecentlyFinishedDrive() -> Drive? {
-    let cutoff = Date().addingTimeInterval(kRecentDriveCutoff)
+    let cutoff = Date().addingTimeInterval(Constants.Configuration.recentDriveCutoff)
     var descriptor = FetchDescriptor<Drive>(
       sortBy: [SortDescriptor(\Drive.endedAt, order: .reverse)]
     )

@@ -41,7 +41,7 @@ enum AppBootstrap {
   // MARK: - Private
 
   private static func isUITesting() -> Bool {
-    ProcessInfo.processInfo.arguments.contains(kUITestingFlag)
+    ProcessInfo.processInfo.arguments.contains(Constants.Testing.UITestingFlag)
   }
 
   private static func createModelContainer(inMemoryOnly: Bool) -> ModelContainer {
@@ -98,7 +98,7 @@ enum AppBootstrap {
   }
 
   private static func registerBGTasks(placeNameSweepService: PlaceNameSweepService, weatherSweepService: WeatherSweepService) {
-    BGTaskScheduler.shared.register(forTaskWithIdentifier: kPlaceNameSweepTaskIdentifier, using: nil) { task in
+    BGTaskScheduler.shared.register(forTaskWithIdentifier: Constants.Configuration.placeNameSweepTaskIdentifier, using: nil) { task in
       guard let processingTask = task as? BGProcessingTask else {
         task.setTaskCompleted(success: false)
         return
@@ -112,7 +112,7 @@ enum AppBootstrap {
         processingTask.setTaskCompleted(success: false)
       }
     }
-    BGTaskScheduler.shared.register(forTaskWithIdentifier: kWeatherSweepTaskIdentifier, using: nil) { task in
+    BGTaskScheduler.shared.register(forTaskWithIdentifier: Constants.Configuration.weatherSweepTaskIdentifier, using: nil) { task in
       guard let processingTask = task as? BGProcessingTask else {
         task.setTaskCompleted(success: false)
         return

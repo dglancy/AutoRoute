@@ -8,24 +8,23 @@
 import Foundation
 import CoreLocation
 
-// MARK: - App
-
-let kGPXCreator = "Driveline for iOS"
-
-// MARK: - Configuration
-
-nonisolated let kMinimumLocationAccuracy: CLLocationAccuracy = 50
-nonisolated let kMaxLocationAge: TimeInterval = 5
-nonisolated let kDrivePlaceNameSweepCutoff: TimeInterval = -2_592_000 // 30 days
-nonisolated let kDriveWeatherSweepCutoff: TimeInterval = -2_592_000 // 30 days
-let kRecentDriveCutoff: TimeInterval = -1800
-let kPlaceNameSweepTaskIdentifier = "com.targatrips.driveline.placename-sweep"
-let kWeatherSweepTaskIdentifier = "com.targatrips.driveline.weather-sweep"
-
-// MARK: - Common strings
-
-let kDashString = "—"
-
-// MARK: - Testing
-
-let kUITestingFlag = "-ui-testing"
+enum Constants {
+  enum App {
+    nonisolated static let GPXCreator = "Driveline for iOS"
+    nonisolated static let dashString = "—"
+  }
+  
+  enum Configuration {
+    nonisolated static let minimumLocationAccuracy: CLLocationAccuracy = 50
+    nonisolated static let maxLocationAge: TimeInterval = 5
+    nonisolated static let drivePlaceNameSweepCutoff: TimeInterval = -2_592_000 // 30 days
+    nonisolated static let driveWeatherSweepCutoff: TimeInterval = -2_592_000 // 30 days
+    nonisolated static let recentDriveCutoff: TimeInterval = -1800
+    nonisolated static let placeNameSweepTaskIdentifier = "com.targatrips.driveline.placename-sweep"
+    nonisolated static let weatherSweepTaskIdentifier = "com.targatrips.driveline.weather-sweep"
+  }
+  
+  enum Testing {
+    nonisolated static let UITestingFlag = "-ui-testing"
+  }
+}

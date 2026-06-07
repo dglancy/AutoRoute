@@ -60,13 +60,13 @@ struct Driveline: App {
   // MARK: - Private
 
   private func schedulePlaceNameSweepTask() {
-    let request = BGProcessingTaskRequest(identifier: kPlaceNameSweepTaskIdentifier)
+    let request = BGProcessingTaskRequest(identifier: Constants.Configuration.placeNameSweepTaskIdentifier)
     request.requiresNetworkConnectivity = true
     try? BGTaskScheduler.shared.submit(request)
   }
 
   private func scheduleWeatherSweepTask() {
-    let request = BGProcessingTaskRequest(identifier: kWeatherSweepTaskIdentifier)
+    let request = BGProcessingTaskRequest(identifier: Constants.Configuration.weatherSweepTaskIdentifier)
     request.requiresNetworkConnectivity = true
     try? BGTaskScheduler.shared.submit(request)
   }

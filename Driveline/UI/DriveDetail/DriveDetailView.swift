@@ -61,6 +61,8 @@ struct DriveDetailView: View {
             weatherCard
             metadataCard
             shareDriveButton
+            Spacer()
+            weatherAttributionFooter
           }
           .padding(.horizontal, 16)
           .padding(.bottom, 24)
@@ -185,7 +187,6 @@ struct DriveDetailView: View {
           }
         }
 
-        weatherAttributionFooter
       }
       .cardBackground(cornerRadius: 16)
       .task { viewModel.loadWeatherAttribution() }
@@ -197,9 +198,7 @@ struct DriveDetailView: View {
     if let legalURL = viewModel.weatherAttributionLegalURL,
        let lightMarkURL = viewModel.weatherAttributionLightMarkURL,
        let darkMarkURL = viewModel.weatherAttributionDarkMarkURL {
-      Divider().padding(.horizontal, 16)
-      HStack {
-        Spacer()
+      VStack(spacing: 4) {
         Link(destination: legalURL) {
           AsyncImage(url: colorScheme == .dark ? darkMarkURL : lightMarkURL) { image in
             image.resizable().scaledToFit()
@@ -208,9 +207,12 @@ struct DriveDetailView: View {
           }
           .frame(height: 14)
         }
+        Link(String(localized: "Weather data provided by Apple Weather", comment: "Weather attribution footer link"), destination: legalURL)
+          .font(.caption2)
+          .foregroundStyle(Color(.secondaryLabel))
       }
-      .padding(.horizontal, 16)
-      .padding(.vertical, 10)
+      .frame(maxWidth: .infinity)
+      .padding(.vertical, 8)
     }
   }
 

@@ -190,9 +190,13 @@ final class DriveRecordingService {
       .sink { [weak self] location in
         Task { [weak self] in
           guard let self, let drive = self.drive else { return }
-          if let weather = try? await self.weatherService.fetchWeather(at: location, type: .start) {
+          do {
+            let weather = try await self.weatherService.fetchWeather(at: location, type: .start)
             drive.weatherReadings = (drive.weatherReadings ?? []) + [weather]
             self.saveModelContext()
+            Log.data.info("Start weather fetched: \(weather.conditionDescription), \(weather.temperatureCelsius)°C")
+          } catch {
+            Log.data.error("Start weather fetch failed: \(error)")
           }
         }
       }
@@ -203,9 +207,13 @@ final class DriveRecordingService {
     let location = CLLocation(latitude: lastPosition.latitude, longitude: lastPosition.longitude)
     Task { [weak self] in
       guard let self else { return }
-      if let weather = try? await self.weatherService.fetchWeather(at: location, type: .end) {
+      do {
+        let weather = try await self.weatherService.fetchWeather(at: location, type: .end)
         drive.weatherReadings = (drive.weatherReadings ?? []) + [weather]
         self.saveModelContext()
+        Log.data.info("End weather fetched: \(weather.conditionDescription), \(weather.temperatureCelsius)°C")
+      } catch {
+        Log.data.error("End weather fetch failed: \(error)")
       }
     }
   }

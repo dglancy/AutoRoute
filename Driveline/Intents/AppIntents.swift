@@ -67,7 +67,7 @@ struct StartDriveIntent: AppIntent {
 
 // MARK: - Finish Drive Intent
 
-struct FinishDriveIntent: AppIntent {
+struct FinishDriveIntent: LiveActivityIntent {
 
   // MARK: - Properties
 

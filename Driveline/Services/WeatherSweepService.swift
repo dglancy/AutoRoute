@@ -28,7 +28,7 @@ final class WeatherSweepService {
   // MARK: - Actions
 
   func sweep() async {
-    let cutoff = Date().addingTimeInterval(kDriveWeatherSweepCutoff)
+    let cutoff = Date().addingTimeInterval(Constants.Configuration.driveWeatherSweepCutoff)
     let descriptor = FetchDescriptor<Drive>(
       predicate: #Predicate<Drive> { drive in
         drive.startedAt >= cutoff

@@ -44,7 +44,7 @@ final class RecordingViewModel {
   }
 
   var startedAt: String {
-    guard let date = driveService.drive?.startedAt else { return kDashString }
+    guard let date = driveService.drive?.startedAt else { return Constants.App.dashString }
     return date.clockString()
   }
 

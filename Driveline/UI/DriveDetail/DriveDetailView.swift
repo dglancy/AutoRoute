@@ -16,6 +16,7 @@ struct DriveDetailView: View {
   @State private var viewModel: DriveDetailViewModel
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.colorScheme) private var colorScheme
 
   private let mapHeight: CGFloat = 280
 
@@ -57,6 +58,7 @@ struct DriveDetailView: View {
             driveHeader
             statTiles
             endpointsCard
+            weatherCard
             metadataCard
             shareDriveButton
           }
@@ -146,6 +148,70 @@ struct DriveDetailView: View {
       }
     }
     .cardBackground(cornerRadius: 16)
+  }
+
+  @ViewBuilder
+  private var weatherCard: some View {
+    if viewModel.hasWeather {
+      VStack(spacing: 0) {
+        if let symbol = viewModel.startWeatherSymbol,
+           let description = viewModel.startWeatherDescription {
+          IconRow(
+            title: description,
+            subtitle: String(localized: "At Departure", comment: "Weather row subtitle"),
+            trailing: viewModel.startWeatherTemperature
+          ) {
+            Image(systemName: symbol)
+              .symbolRenderingMode(.multicolor)
+              .font(.callout)
+              .frame(width: 24)
+              .dynamicTypeSize(.xSmall ... .accessibility1)
+          }
+        }
+
+        if let symbol = viewModel.endWeatherSymbol,
+           let description = viewModel.endWeatherDescription {
+          Divider().padding(.leading, 52)
+          IconRow(
+            title: description,
+            subtitle: String(localized: "At Arrival", comment: "Weather row subtitle"),
+            trailing: viewModel.endWeatherTemperature
+          ) {
+            Image(systemName: symbol)
+              .symbolRenderingMode(.multicolor)
+              .font(.callout)
+              .frame(width: 24)
+              .dynamicTypeSize(.xSmall ... .accessibility1)
+          }
+        }
+
+        weatherAttributionFooter
+      }
+      .cardBackground(cornerRadius: 16)
+      .task { viewModel.loadWeatherAttribution() }
+    }
+  }
+
+  @ViewBuilder
+  private var weatherAttributionFooter: some View {
+    if let legalURL = viewModel.weatherAttributionLegalURL,
+       let lightMarkURL = viewModel.weatherAttributionLightMarkURL,
+       let darkMarkURL = viewModel.weatherAttributionDarkMarkURL {
+      Divider().padding(.horizontal, 16)
+      HStack {
+        Spacer()
+        Link(destination: legalURL) {
+          AsyncImage(url: colorScheme == .dark ? darkMarkURL : lightMarkURL) { image in
+            image.resizable().scaledToFit()
+          } placeholder: {
+            EmptyView()
+          }
+          .frame(height: 14)
+        }
+      }
+      .padding(.horizontal, 16)
+      .padding(.vertical, 10)
+    }
   }
 
   private var metadataCard: some View {

@@ -354,6 +354,7 @@
 				nl,
 				de,
 				fr,
+				"en-GB",
 			);
 			mainGroup = 6D47A5072FCAD20600E6C7B7;
 			minimizedProjectReferenceProxies = 1;

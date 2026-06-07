@@ -59,7 +59,7 @@ struct RecordingView: View {
         .frame(width: 36, height: 36)
       }
       .buttonStyle(.plain)
-      .accessibilityLabel(String(localized: "Minimise recording screen", comment: "Dismiss button accessibility label"))
+      .accessibilityLabel(String(localized: "Minimize recording screen", comment: "Dismiss button accessibility label"))
 
       Spacer()
       recordingBadge

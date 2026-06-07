@@ -21,7 +21,7 @@ Driveline grew out of a personal need. I run [Targa Trips](https://www.targatrip
 - **PNG export** that renders a clean map snapshot with the route drawn on it, suitable for sharing.
 - **Minimal recording screen** showing elapsed time. There is no live map during recording; see below for why.
 - **Live Activity** on the Lock Screen and Dynamic Island showing elapsed time while a drive is in progress.
-- **Localised** into English, French, German, and Dutch.
+- **Localized** into US English, British English (also used in Australia and Ireland), French, German, and Dutch.
 
 ## Philosophy
 
@@ -99,6 +99,6 @@ Driveline is built to run almost entirely in the background. Rendering a live ma
 
 4. Build and run on a connected device. The first launch will ask for location permission; choose "Always Allow" so recording works when the screen is off.
 
-## Licence
+## License
 
 MIT. See [LICENSE](LICENSE).

@@ -22,7 +22,7 @@ struct HomeStatsPanelView: View {
   var body: some View {
     HStack(spacing: 11) {
       StatCard(
-        icon: "checkmark.circle",
+        icon: Icons.Panels.drives,
         label: String(localized: "DRIVES", comment: "Stats panel drives card label"),
         value: "\(driveCount)",
         unit: nil,
@@ -33,7 +33,7 @@ struct HomeStatsPanelView: View {
       )
 
       StatCard(
-        icon: "arrow.right",
+        icon: Icons.Panels.distance,
         label: String(localized: "DISTANCE", comment: "Stats panel distance card label"),
         value: distanceValue,
         unit: distanceUnit,

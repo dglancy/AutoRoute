@@ -42,7 +42,7 @@ final class HomeViewModel {
 
   @ObservationIgnored var modelContext: ModelContext?
   @ObservationIgnored var spotlightIndexingService: SpotlightIndexingService?
-  @ObservationIgnored private var allDrives: [Drive] = []
+  @ObservationIgnored private var drives: [Drive] = []
   @ObservationIgnored private var currentSearchText: String = ""
 
   var navigationPath: NavigationPath = NavigationPath()
@@ -131,9 +131,9 @@ final class HomeViewModel {
   }
 
   func update(with drives: [Drive]) {
-    allDrives = drives
+    self.drives = drives
     sections = buildSections(from: filteredDrives)
-    buildRecentStats(from: drives)
+    buildStats(from: drives)
   }
 
   func applySearch(text: String) {
@@ -169,8 +169,8 @@ final class HomeViewModel {
   private var activeStats: DriveStats { statsScope == .last30Days ? recentStats : allTimeStats }
 
   private var filteredDrives: [Drive] {
-    guard !currentSearchText.isEmpty else { return allDrives }
-    return allDrives.filter { matches($0, currentSearchText) }
+    guard !currentSearchText.isEmpty else { return drives }
+    return drives.filter { matches($0, currentSearchText) }
   }
 
   private func matches(_ drive: Drive, _ query: String) -> Bool {
@@ -211,7 +211,7 @@ final class HomeViewModel {
     )
   }
 
-  private func buildRecentStats(from drives: [Drive]) {
+  private func buildStats(from drives: [Drive]) {
     let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
     recentStats = driveStats(from: drives.filter { $0.startedAt >= cutoff })
     allTimeStats = driveStats(from: drives)

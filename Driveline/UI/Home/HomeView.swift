@@ -159,21 +159,15 @@ struct HomeView: View {
   }
 
   // MARK: - Toolbar
-
   @ToolbarContentBuilder
   private var toolbarItems: some ToolbarContent {
     ToolbarItem(placement: .topBarLeading) {
       if viewModel.isSelectMode {
         Button.cancel { viewModel.exitSelectMode() }
-      } else if !viewModel.sections.isEmpty {
-        Button(String(localized: "Select", comment: "Enter multiselect mode")) {
-          viewModel.enterSelectMode()
-        }
-        .disabled(driveService.isRecording)
       }
     }
 
-    ToolbarItem(placement: .topBarTrailing) {
+    ToolbarItemGroup(placement: .topBarTrailing) {
       if !viewModel.isSelectMode {
         Button {
           if driveService.isRecording {
@@ -186,12 +180,12 @@ struct HomeView: View {
             Circle().fill(Color(.systemFill))
             if driveService.isRecording {
               RoundedRectangle(cornerRadius: 3)
-                .fill(.red)
+                .fill(.black)
                 .frame(width: 11, height: 11)
             } else {
               Image(systemName: Icons.recordingActive)
                 .font(.title2)
-                .foregroundStyle(.red)
+                .foregroundStyle(.black)
             }
           }
           .frame(width: 36, height: 36)
@@ -202,6 +196,26 @@ struct HomeView: View {
           ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
           : String(localized: "Start a new drive", comment: "Record button when idle")
         )
+
+        Menu {
+          Button(
+            String(localized: "Select Drives", comment: "Menu item to enter multiselect mode"),
+            systemImage: "checkmark.circle"
+          ) {
+            viewModel.enterSelectMode()
+          }
+          .disabled(driveService.isRecording || viewModel.sections.isEmpty)
+
+          Button(
+            String(localized: "Settings", comment: "Menu item to open settings"),
+            systemImage: "gear"
+          ) {
+            viewModel.showingSettings = true
+          }
+        } label: {
+          Image(systemName: "ellipsis")
+        }
+        .accessibilityLabel(String(localized: "More options", comment: "Ellipsis menu accessibility label"))
       }
     }
   }

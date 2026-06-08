@@ -1917,7 +1917,7 @@
       }
     },
     "More options" : {
-      "comment" : "Accessibility label for the more options button on the drive detail screen",
+      "comment" : "Accessibility label for the more options button on the drive detail screen\nEllipsis menu accessibility label",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2299,6 +2299,7 @@
     },
     "Select" : {
       "comment" : "Enter multiselect mode",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2354,6 +2355,12 @@
           }
         }
       }
+    },
+    "Select Drives" : {
+      "comment" : "Menu item to enter multiselect mode"
+    },
+    "Settings" : {
+      "comment" : "Menu item to open settings"
     },
     "Share Drive" : {
       "comment" : "Share button\nShare drive dialog title",

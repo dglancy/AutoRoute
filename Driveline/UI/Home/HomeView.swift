@@ -31,6 +31,7 @@ struct HomeView: View {
       content
         .navigationTitle("Drives")
         .searchable(text: $searchText, prompt: "Search")
+        .searchDictationBehavior(.inline(activation: .onSelect))
         .toolbar { toolbarItems }
         .onChange(of: drives, initial: true) { _, newDrives in
           viewModel.update(with: newDrives)

@@ -16,6 +16,10 @@ final class HomeViewModel {
 
   // MARK: - Types
 
+  enum StatsScope {
+    case last30Days, allTime
+  }
+
   struct DriveRow: Identifiable {
     let drive: Drive
     let display: DriveRowDisplay
@@ -37,9 +41,13 @@ final class HomeViewModel {
 
   var navigationPath: NavigationPath = NavigationPath()
   private(set) var sections: [DriveSection] = []
+  private(set) var statsScope: StatsScope = .last30Days
   private(set) var recentDriveCount: Int = 0
   private(set) var recentDistanceValue: String = "0.0"
   private(set) var recentDistanceUnit: String = Measurement<UnitLength>.localizedDistanceUnitSymbol()
+  private(set) var allTimeDriveCount: Int = 0
+  private(set) var allTimeDistanceValue: String = "0.0"
+  private(set) var allTimeDistanceUnit: String = Measurement<UnitLength>.localizedDistanceUnitSymbol()
   private(set) var isSelectMode: Bool = false
   private(set) var selectedDriveIDs: Set<UUID> = []
   private(set) var startDriveErrorMessage: String?
@@ -51,6 +59,15 @@ final class HomeViewModel {
   var showingMergeSheet: Bool = false
 
   // MARK: - Computed Properties
+
+  var statsDriveCount: Int { statsScope == .last30Days ? recentDriveCount : allTimeDriveCount }
+  var statsDistanceValue: String { statsScope == .last30Days ? recentDistanceValue : allTimeDistanceValue }
+  var statsDistanceUnit: String { statsScope == .last30Days ? recentDistanceUnit : allTimeDistanceUnit }
+  var statsScopeLabel: String {
+    statsScope == .last30Days
+      ? String(localized: "last 30 days", comment: "Stats scope label for recent period")
+      : String(localized: "all time", comment: "Stats scope label for all drives")
+  }
 
   var canMerge: Bool { selectedDriveIDs.count == 2 }
   var canDelete: Bool { !selectedDriveIDs.isEmpty }
@@ -70,6 +87,10 @@ final class HomeViewModel {
   }
 
   // MARK: - Methods
+
+  func toggleStatsScope() {
+    statsScope = statsScope == .last30Days ? .allTime : .last30Days
+  }
 
   func startDrive(trigger: Drive.RecordingTrigger = .manual, using driveService: DriveRecordingService) {
     do {
@@ -190,10 +211,14 @@ final class HomeViewModel {
     let cutoff = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
     let recent = drives.filter { $0.startedAt >= cutoff }
     recentDriveCount = recent.count
-    let totalMetres = recent.reduce(0.0) { $0 + $1.distanceMetres }
-    let measurement = Measurement(value: totalMetres, unit: UnitLength.meters)
-    recentDistanceValue = measurement.localizedDistanceValueString()
-    recentDistanceUnit = measurement.localizedDistanceUnitSymbol()
+    let recentMeasurement = Measurement(value: recent.reduce(0.0) { $0 + $1.distanceMetres }, unit: UnitLength.meters)
+    recentDistanceValue = recentMeasurement.localizedDistanceValueString()
+    recentDistanceUnit = recentMeasurement.localizedDistanceUnitSymbol()
+
+    allTimeDriveCount = drives.count
+    let allTimeMeasurement = Measurement(value: drives.reduce(0.0) { $0 + $1.distanceMetres }, unit: UnitLength.meters)
+    allTimeDistanceValue = allTimeMeasurement.localizedDistanceValueString()
+    allTimeDistanceUnit = allTimeMeasurement.localizedDistanceUnitSymbol()
   }
 
   private func sectionTitle(for date: Date, today: Date, calendar: Calendar) -> String {

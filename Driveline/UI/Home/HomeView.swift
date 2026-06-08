@@ -101,9 +101,11 @@ struct HomeView: View {
         if viewModel.recentDriveCount > 0 && !viewModel.isSelectMode && searchText.isEmpty {
           Section {
             HomeStatsPanelView(
-              driveCount: viewModel.recentDriveCount,
-              distanceValue: viewModel.recentDistanceValue,
-              distanceUnit: viewModel.recentDistanceUnit
+              driveCount: viewModel.statsDriveCount,
+              distanceValue: viewModel.statsDistanceValue,
+              distanceUnit: viewModel.statsDistanceUnit,
+              scopeLabel: viewModel.statsScopeLabel,
+              onTap: viewModel.toggleStatsScope
             )
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)

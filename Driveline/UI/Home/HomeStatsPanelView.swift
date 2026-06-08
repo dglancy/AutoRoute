@@ -14,6 +14,8 @@ struct HomeStatsPanelView: View {
   let driveCount: Int
   let distanceValue: String
   let distanceUnit: String
+  let scopeLabel: String
+  let onTap: () -> Void
 
   // MARK: - Body
 
@@ -23,24 +25,28 @@ struct HomeStatsPanelView: View {
         icon: "checkmark.circle",
         label: String(localized: "DRIVES", comment: "Stats panel drives card label"),
         value: "\(driveCount)",
-        unit: nil
+        unit: nil,
+        scopeLabel: scopeLabel
       )
       .accessibilityLabel(
-        String(localized: "\(driveCount) drives in the last 30 days", comment: "Accessibility label for drives stats card")
+        String(localized: "\(driveCount) drives, \(scopeLabel)", comment: "Accessibility label for drives stats card")
       )
 
       StatCard(
         icon: "arrow.right",
         label: String(localized: "DISTANCE", comment: "Stats panel distance card label"),
         value: distanceValue,
-        unit: distanceUnit
+        unit: distanceUnit,
+        scopeLabel: scopeLabel
       )
       .accessibilityLabel(
-        String(localized: "\(distanceValue) \(distanceUnit) in the last 30 days", comment: "Accessibility label for distance stats card")
+        String(localized: "\(distanceValue) \(distanceUnit), \(scopeLabel)", comment: "Accessibility label for distance stats card")
       )
     }
     .padding(.horizontal, 16)
     .padding(.vertical, 8)
+    .contentShape(Rectangle())
+    .onTapGesture { onTap() }
   }
 }
 
@@ -52,6 +58,7 @@ private struct StatCard: View {
   let label: String
   let value: String
   let unit: String?
+  let scopeLabel: String
 
   var body: some View {
     ZStack(alignment: .topTrailing) {
@@ -93,7 +100,7 @@ private struct StatCard: View {
           }
         }
 
-        Text(String(localized: "last 30 days", comment: "Stats card scope caption"))
+        Text(scopeLabel)
           .font(.caption2)
           .foregroundStyle(.white.opacity(0.7))
       }
@@ -112,7 +119,7 @@ private struct StatCard: View {
 #Preview {
   List {
     Section {
-      HomeStatsPanelView(driveCount: 6, distanceValue: "93.5", distanceUnit: "km")
+      HomeStatsPanelView(driveCount: 6, distanceValue: "93.5", distanceUnit: "km", scopeLabel: "last 30 days", onTap: {})
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)
         .listRowSeparator(.hidden)

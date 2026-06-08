@@ -47,6 +47,7 @@ final class HomeViewModel {
   var showingStartDriveError: Bool = false
   var showingRecordingScreen: Bool = false
   var showingMergeSheet: Bool = false
+  var showingSettings: Bool = false
 
   // MARK: - Computed Properties
 

@@ -193,6 +193,7 @@ final class DriveRecordingService {
   }
 
   private func setupStartWeather(for drive: Drive) {
+    guard drive.weatherReadings?.contains(where: { $0.type == .start }) != true else { return }
     startWeatherCancellable = locationService.locationPublisher
       .first()
       .sink { [weak self] location in

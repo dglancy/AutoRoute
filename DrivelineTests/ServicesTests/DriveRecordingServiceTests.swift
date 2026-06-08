@@ -284,6 +284,61 @@ final class DriveRecordingServiceTests: SwiftDataBaseTestCase {
     #expect(mockGeocoding.geocodedLocations.isEmpty)
   }
 
+  // MARK: - resumeDrive weather
+
+  @Test
+  func resumeDriveDoesNotFetchStartWeatherWhenAlreadyPresent() async throws {
+    let mockWeather = MockWeatherFetchService()
+    let finishedDrive = try insertFinishedDrive()
+    let existingWeather = Weather(temperatureCelsius: 20, conditionDescription: "Sunny", symbolName: "sun.max.fill", type: .start)
+    context!.insert(existingWeather)
+    finishedDrive.weatherReadings = [existingWeather]
+    try context!.save()
+    let (service, locationService, _) = makeServices(
+      weatherService: mockWeather,
+      userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
+    )
+
+    try service.startDrive(trigger: .automatic)
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    locationService.locationPublisher.send(location)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(mockWeather.fetchedLocations.isEmpty)
+  }
+
+  @Test
+  func resumeDriveFetchesStartWeatherWhenMissing() async throws {
+    let mockWeather = MockWeatherFetchService()
+    let finishedDrive = try insertFinishedDrive()
+    let (service, locationService, _) = makeServices(
+      weatherService: mockWeather,
+      userPreferences: makePreferences(continueDriveIfRecentlyFinished: true)
+    )
+
+    try service.startDrive(trigger: .automatic)
+
+    let location = CLLocation(
+      coordinate: CLLocationCoordinate2D(latitude: 51.5, longitude: -0.1),
+      altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 5,
+      course: 0, courseAccuracy: 1, speed: 0, speedAccuracy: 0.5, timestamp: Date()
+    )
+    locationService.locationPublisher.send(location)
+
+    await Task.yield()
+    await Task.yield()
+
+    #expect(finishedDrive.startWeather?.type == .start)
+    #expect(mockWeather.fetchedLocations.count == 1)
+  }
+
   // MARK: - Continue drive if recently finished
 
   @Test

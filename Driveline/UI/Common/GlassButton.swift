@@ -22,11 +22,11 @@ struct GlassButton: View {
       Image(systemName: systemImage)
         .font(.callout.weight(.semibold))
         .foregroundStyle(.primary)
-        .frame(width: 44, height: 44)
-        .background(.regularMaterial, in: Circle())
-        .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+        .frame(width: 18, height: 18)
         .dynamicTypeSize(.xSmall ... .accessibility1)
     }
+    .buttonStyle(.glass)
+    .buttonBorderShape(.circle)
     .accessibilityLabel(Text(accessibilityLabel))
   }
 }

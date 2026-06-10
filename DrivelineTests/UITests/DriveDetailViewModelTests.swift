@@ -248,6 +248,30 @@ struct DriveDetailViewModelTests {
     #expect(file.url == url)
   }
 
+  // MARK: - Exported file cleanup
+
+  @Test
+  func cleanUpExportedFileRemovesFile() throws {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).gpx")
+    try Data("<gpx/>".utf8).write(to: url)
+    #expect(FileManager.default.fileExists(atPath: url.path))
+
+    vm.cleanUpExportedFile(at: url)
+
+    #expect(FileManager.default.fileExists(atPath: url.path) == false)
+  }
+
+  @Test
+  func cleanUpExportedFileToleratesMissingFile() {
+    let vm = DriveDetailViewModel(drive: makeDrive())
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).gpx")
+
+    vm.cleanUpExportedFile(at: url)
+
+    #expect(FileManager.default.fileExists(atPath: url.path) == false)
+  }
+
   // MARK: - Helpers
 
   private func makeDrive(name: String = "Test Drive") -> Drive {

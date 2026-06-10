@@ -24,7 +24,7 @@ final class ExportDriveGPX: ExportingDrive {
       throw ExportError.gpxEncodingFailed
     }
 
-    try data.write(to: fileURL, options: .atomic)
+    try data.write(to: fileURL, options: [.atomic, .completeFileProtection])
     return fileURL
   }
 

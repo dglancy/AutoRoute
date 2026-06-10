@@ -136,6 +136,16 @@ final class DriveDetailViewModel {
     }
   }
 
+  func cleanUpExportedFile(at url: URL) {
+    do {
+      try FileManager.default.removeItem(at: url)
+    } catch CocoaError.fileNoSuchFile {
+      // Already gone — nothing to clean up.
+    } catch {
+      Log.ui.error("Failed to remove exported file after sharing: \(error.localizedDescription)")
+    }
+  }
+
   // MARK: - Private
 
   private func formatTemperature(_ celsius: Double) -> String {

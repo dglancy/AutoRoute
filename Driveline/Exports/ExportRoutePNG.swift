@@ -50,7 +50,7 @@ final class ExportDrivePNG: ExportingDrive {
     let fileURL = ExportDriveFileNamingService.fileURL(for: drive, type: .png)
 
     do {
-      try pngData.write(to: fileURL, options: .atomic)
+      try pngData.write(to: fileURL, options: [.atomic, .completeFileProtection])
       return fileURL
     } catch {
       Log.ui.error("Failed to write PNG for drive: \(drive.startedAt) — error: \(error.localizedDescription)")

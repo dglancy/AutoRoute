@@ -276,7 +276,9 @@ private struct ExportShareSheetModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content.sheet(item: $viewModel.exportedFile) { file in
-      ActivityViewController(activityItems: [file.url])
+      ActivityViewController(activityItems: [file.url]) {
+        viewModel.cleanUpExportedFile(at: file.url)
+      }
     }
   }
 }

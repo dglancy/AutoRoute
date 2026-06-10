@@ -16,27 +16,9 @@ struct DriveDetailViewModelTests {
   // MARK: - Initial State
 
   @Test
-  func showSharingDialogIsFalseByDefault() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
-    #expect(vm.showSharingDialog == false)
-  }
-
-  @Test
   func showingFullScreenMapIsFalseByDefault() {
     let vm = DriveDetailViewModel(drive: makeDrive())
     #expect(vm.showingFullScreenMap == false)
-  }
-
-  @Test
-  func exportedFileIsNilByDefault() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
-    #expect(vm.exportedFile == nil)
-  }
-
-  @Test
-  func exportErrorIsNilByDefault() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
-    #expect(vm.exportError == nil)
   }
 
   // MARK: - Computed Properties
@@ -183,93 +165,34 @@ struct DriveDetailViewModelTests {
     #expect(vm.weatherAttributionLegalURL == nil)
   }
 
-  // MARK: - shareDriveGPX
+  // MARK: - Export availability
 
   @Test
-  func shareDriveGPXWithEmptyDriveSetsExportError() async {
+  func canExportIsFalseWhenDriveHasNoPositions() {
     let vm = DriveDetailViewModel(drive: makeDrive())
-    vm.shareDriveGPX()
-    for _ in 0..<10 { await Task.yield() }
-    #expect(vm.exportError != nil)
+    #expect(vm.canExport == false)
   }
 
   @Test
-  func shareDriveGPXWithEmptyDriveDoesNotSetExportedFile() async {
-    let vm = DriveDetailViewModel(drive: makeDrive())
-    vm.shareDriveGPX()
-    for _ in 0..<10 { await Task.yield() }
-    #expect(vm.exportedFile == nil)
-  }
-
-  @Test
-  func shareDriveGPXWithPositionsSetsExportedFile() async throws {
+  func canExportIsTrueWhenDriveHasPositions() {
     let vm = DriveDetailViewModel(drive: driveWithOnePosition())
-    vm.shareDriveGPX()
-    for _ in 0..<20 { await Task.yield() }
-    let file = try #require(vm.exportedFile)
-    defer { try? FileManager.default.removeItem(at: file.url) }
-    #expect(vm.exportError == nil)
-    #expect(file.url.pathExtension == "gpx")
-    #expect(FileManager.default.fileExists(atPath: file.url.path))
+    #expect(vm.canExport == true)
   }
 
-  // MARK: - shareDrivePNG
+  // MARK: - Export items
 
   @Test
-  func shareDrivePNGWithEmptyDriveSetsExportError() async {
-    let vm = DriveDetailViewModel(drive: makeDrive())
-    vm.shareDrivePNG()
-    for _ in 0..<10 { await Task.yield() }
-    #expect(vm.exportError != nil)
+  func gpxExportWrapsDrive() {
+    let drive = driveWithOnePosition()
+    let vm = DriveDetailViewModel(drive: drive)
+    #expect(vm.gpxExport.drive === drive)
   }
 
   @Test
-  func shareDrivePNGWithEmptyDriveDoesNotSetExportedFile() async {
-    let vm = DriveDetailViewModel(drive: makeDrive())
-    vm.shareDrivePNG()
-    for _ in 0..<10 { await Task.yield() }
-    #expect(vm.exportedFile == nil)
-  }
-
-  // MARK: - ExportedFile
-
-  @Test
-  func exportedFileHasUniqueIDs() {
-    let url = URL(fileURLWithPath: "/tmp/test.gpx")
-    let a = ExportedFile(url: url)
-    let b = ExportedFile(url: url)
-    #expect(a.id != b.id)
-  }
-
-  @Test
-  func exportedFileStoresURL() {
-    let url = URL(fileURLWithPath: "/tmp/test.gpx")
-    let file = ExportedFile(url: url)
-    #expect(file.url == url)
-  }
-
-  // MARK: - Exported file cleanup
-
-  @Test
-  func cleanUpExportedFileRemovesFile() throws {
-    let vm = DriveDetailViewModel(drive: makeDrive())
-    let url = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).gpx")
-    try Data("<gpx/>".utf8).write(to: url)
-    #expect(FileManager.default.fileExists(atPath: url.path))
-
-    vm.cleanUpExportedFile(at: url)
-
-    #expect(FileManager.default.fileExists(atPath: url.path) == false)
-  }
-
-  @Test
-  func cleanUpExportedFileToleratesMissingFile() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
-    let url = FileManager.default.temporaryDirectory.appendingPathComponent("\(UUID().uuidString).gpx")
-
-    vm.cleanUpExportedFile(at: url)
-
-    #expect(FileManager.default.fileExists(atPath: url.path) == false)
+  func pngExportWrapsDrive() {
+    let drive = driveWithOnePosition()
+    let vm = DriveDetailViewModel(drive: drive)
+    #expect(vm.pngExport.drive === drive)
   }
 
   // MARK: - Helpers

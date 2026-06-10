@@ -39,6 +39,8 @@ enum Icons {
     static let ellipsis = "ellipsis"
     static let viewfinder = "viewfinder"
     static let sharing = "square.and.arrow.up"
+    static let gpxFile = "doc.text"
+    static let pngImage = "photo"
   }
 
   enum Selection {

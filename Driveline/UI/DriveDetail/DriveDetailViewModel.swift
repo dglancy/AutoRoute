@@ -13,13 +13,6 @@ import SwiftData
 import SwiftUI
 import WeatherKit
 
-// MARK: - ExportedFile
-
-struct ExportedFile: Identifiable {
-  let id = UUID()
-  let url: URL
-}
-
 // MARK: - DriveDetailViewModel
 
 @MainActor
@@ -28,13 +21,10 @@ final class DriveDetailViewModel {
 
   // MARK: - Properties
 
-  var showSharingDialog = false
   var showingFullScreenMap = false
   var showingMoreMenu = false
   var showingDeleteConfirmation = false
   var showingEditDrive = false
-  var exportedFile: ExportedFile?
-  var exportError: String?
 
   @ObservationIgnored let drive: Drive
   @ObservationIgnored private let stats: DriveStatsPresenter
@@ -78,6 +68,10 @@ final class DriveDetailViewModel {
   var weatherAttributionDarkMarkURL: URL? { weatherAttribution?.combinedMarkDarkURL }
   var weatherAttributionLegalURL: URL? { weatherAttribution?.legalPageURL }
 
+  var canExport: Bool { !drive.orderedPositions.isEmpty }
+  var gpxExport: DriveGPXExport { DriveGPXExport(drive: drive) }
+  var pngExport: DrivePNGExport { DrivePNGExport(drive: drive) }
+
   var coordinates: [CLLocationCoordinate2D] {
     drive.orderedPositions.map {
       CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
@@ -111,38 +105,6 @@ final class DriveDetailViewModel {
       try modelContext.save()
     } catch {
       Log.data.error("Failed to delete drive: \(error.localizedDescription)")
-    }
-  }
-
-  func shareDriveGPX() {
-    Task {
-      do {
-        let url = try await ExportDriveGPX().export(drive: drive)
-        exportedFile = ExportedFile(url: url)
-      } catch {
-        exportError = error.localizedDescription
-      }
-    }
-  }
-
-  func shareDrivePNG() {
-    Task {
-      do {
-        let url = try await ExportDrivePNG().export(drive: drive)
-        exportedFile = ExportedFile(url: url)
-      } catch {
-        exportError = error.localizedDescription
-      }
-    }
-  }
-
-  func cleanUpExportedFile(at url: URL) {
-    do {
-      try FileManager.default.removeItem(at: url)
-    } catch CocoaError.fileNoSuchFile {
-      // Already gone — nothing to clean up.
-    } catch {
-      Log.ui.error("Failed to remove exported file after sharing: \(error.localizedDescription)")
     }
   }
 

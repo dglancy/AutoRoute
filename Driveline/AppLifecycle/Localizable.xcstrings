@@ -1520,6 +1520,7 @@
     },
     "Export Failed" : {
       "comment" : "Export error alert title",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2279,7 +2280,7 @@
       }
     },
     "OK" : {
-      "comment" : "Dismiss export error alert\nDismiss start drive error alert",
+      "comment" : "Dismiss start drive error alert",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2549,8 +2550,14 @@
     "Settings" : {
       "comment" : "Menu item to open settings"
     },
+    "Share as GPX" : {
+      "comment" : "Share drive as GPX"
+    },
+    "Share as PNG" : {
+      "comment" : "Share drive as PNG"
+    },
     "Share Drive" : {
-      "comment" : "Share button\nShare drive dialog title",
+      "comment" : "Share button",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2580,6 +2587,7 @@
     },
     "Share GPX" : {
       "comment" : "Share drive as GPX",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2609,6 +2617,7 @@
     },
     "Share PNG" : {
       "comment" : "Share drive as PNG",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

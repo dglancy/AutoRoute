@@ -74,12 +74,9 @@ struct DriveDetailView: View {
     .toolbar(.hidden, for: .navigationBar)
     .onAppear { viewModel.modelContext = modelContext }
     .modifier(FullScreenMapModifier(viewModel: viewModel))
-    .modifier(ExportShareSheetModifier(viewModel: viewModel))
-    .modifier(ExportErrorAlertModifier(viewModel: viewModel))
     .modifier(DeleteDriveAlertModifier(viewModel: viewModel, dismiss: { dismiss() }))
     .modifier(EditDriveSheetModifier(viewModel: viewModel))
     .modifier(DriveOptionsDialogModifier(viewModel: viewModel))
-    .modifier(ShareDriveDialogModifier(viewModel: viewModel))
   }
 
   // MARK: - Private Views
@@ -247,14 +244,20 @@ struct DriveDetailView: View {
   }
 
   private var shareDriveButton: some View {
-    Button {
-      viewModel.showSharingDialog = true
+    Menu {
+      ShareLink(item: viewModel.gpxExport, preview: SharePreview(viewModel.name)) {
+        Label(String(localized: "Share as GPX", comment: "Share drive as GPX"), systemImage: Icons.Options.gpxFile)
+      }
+      ShareLink(item: viewModel.pngExport, preview: SharePreview(viewModel.name)) {
+        Label(String(localized: "Share as PNG", comment: "Share drive as PNG"), systemImage: Icons.Options.pngImage)
+      }
     } label: {
       Label(String(localized: "Share Drive", comment: "Share button"), systemImage: Icons.Options.sharing)
         .font(.body.weight(.medium))
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
     }
+    .disabled(!viewModel.canExport)
     .cardBackground(cornerRadius: 16)
   }
 }
@@ -267,34 +270,6 @@ private struct FullScreenMapModifier: ViewModifier {
   func body(content: Content) -> some View {
     content.navigationDestination(isPresented: $viewModel.showingFullScreenMap) {
       FullScreenMapView(drive: viewModel.drive)
-    }
-  }
-}
-
-private struct ExportShareSheetModifier: ViewModifier {
-  @Bindable var viewModel: DriveDetailViewModel
-
-  func body(content: Content) -> some View {
-    content.sheet(item: $viewModel.exportedFile) { file in
-      ActivityViewController(activityItems: [file.url]) {
-        viewModel.cleanUpExportedFile(at: file.url)
-      }
-    }
-  }
-}
-
-private struct ExportErrorAlertModifier: ViewModifier {
-  @Bindable var viewModel: DriveDetailViewModel
-
-  func body(content: Content) -> some View {
-    content.alert(
-      String(localized: "Export Failed", comment: "Export error alert title"),
-      isPresented: Binding(get: { viewModel.exportError != nil }, set: { if !$0 { viewModel.exportError = nil } }),
-      presenting: viewModel.exportError
-    ) { _ in
-      Button(String(localized: "OK", comment: "Dismiss export error alert")) { viewModel.exportError = nil }
-    } message: { error in
-      Text(error)
     }
   }
 }
@@ -327,21 +302,6 @@ private struct EditDriveSheetModifier: ViewModifier {
       EditDriveView(drive: viewModel.drive)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
-    }
-  }
-}
-
-private struct ShareDriveDialogModifier: ViewModifier {
-  @Bindable var viewModel: DriveDetailViewModel
-
-  func body(content: Content) -> some View {
-    content.confirmationDialog(
-      String(localized: "Share Drive", comment: "Share drive dialog title"),
-      isPresented: $viewModel.showSharingDialog
-    ) {
-      Button(String(localized: "Share GPX", comment: "Share drive as GPX")) { viewModel.shareDriveGPX() }
-      Button(String(localized: "Share PNG", comment: "Share drive as PNG")) { viewModel.shareDrivePNG() }
-      Button.cancel()
     }
   }
 }

@@ -34,6 +34,7 @@ final class LocationDataRecorderService: LocationDataRecorderServiceProtocol {
   @ObservationIgnored private var locationCancellable: AnyCancellable?
   @ObservationIgnored private var saveCancellable: AnyCancellable?
   @ObservationIgnored private var hasPendingPositions = false
+  @ObservationIgnored private var lastPosition: Position?
   private(set) var drive: Drive?
 
   // MARK: - Lifecycle
@@ -53,6 +54,7 @@ final class LocationDataRecorderService: LocationDataRecorderServiceProtocol {
     }
     Log.data.info("Starting recording locations")
     self.drive = drive
+    lastPosition = drive.orderedPositions.last
 
     if drive.modelContext == nil {
       modelContext.insert(drive)
@@ -85,6 +87,7 @@ final class LocationDataRecorderService: LocationDataRecorderServiceProtocol {
     saveCancellable = nil
     saveIfNeeded()
     self.drive = nil
+    lastPosition = nil
     Log.data.info("Stopped recording locations")
   }
 
@@ -108,12 +111,14 @@ final class LocationDataRecorderService: LocationDataRecorderServiceProtocol {
       speedAccuracy: location.speedAccuracy
     )
 
-    if let previous = drive.orderedPositions.last {
+    if let previous = lastPosition {
       let from = CLLocation(latitude: previous.latitude, longitude: previous.longitude)
       let to = CLLocation(latitude: position.latitude, longitude: position.longitude)
       drive.accumulatedDistanceMetres += from.distance(from: to)
     }
-    drive.positions = (drive.positions ?? []) + [position]
+    modelContext.insert(position)
+    position.drive = drive
+    lastPosition = position
     hasPendingPositions = true
     Log.data.info("Queued new location: \(position.latitude), \(position.longitude)", privacy: .private)
   }

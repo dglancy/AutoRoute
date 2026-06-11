@@ -30,6 +30,14 @@ final class AppIntentsTests: SwiftDataBaseTestCase {
     }
   }
 
+  // MARK: - DrivelineShortcuts
+
+  @Test
+  func appShortcutsProvidesStartAndFinishShortcuts() {
+    let shortcuts = DrivelineShortcuts.appShortcuts
+    #expect(shortcuts.count == 2)
+  }
+
   // MARK: - IntentDependencyResolver
 
   @Test

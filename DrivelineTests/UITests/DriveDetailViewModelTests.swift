@@ -6,6 +6,7 @@
 //
 
 @testable import Driveline
+import CoreLocation
 import Foundation
 import SwiftData
 import Testing
@@ -84,6 +85,81 @@ struct DriveDetailViewModelTests {
     #expect(vm.triggerDisplayName == Drive.RecordingTrigger.manual.displayName)
   }
 
+  @Test
+  func dateStringMatchesDriveStartedAtLongDateString() {
+    let drive = makeDrive()
+    let vm = buildViewModel(drive: drive)
+    #expect(vm.dateString == drive.startedAt.longDateString())
+  }
+
+  @Test
+  func departureTimeMatchesDriveStartedAtClockString() {
+    let drive = makeDrive()
+    let vm = buildViewModel(drive: drive)
+    #expect(vm.departureTime == drive.startedAt.clockString())
+  }
+
+  @Test
+  func arrivalTimeMatchesDriveEndedAtClockString() {
+    let drive = makeDrive()
+    let vm = buildViewModel(drive: drive)
+    #expect(vm.arrivalTime == drive.endedAt?.clockString())
+  }
+
+  @Test
+  func topSpeedMatchesLocalizedSpeedString() {
+    let drive = driveWithOnePosition()
+    let vm = buildViewModel(drive: drive)
+    let expected = Measurement(value: drive.maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString()
+    #expect(vm.topSpeed == expected)
+  }
+
+  // MARK: - Stats delegation
+
+  @Test
+  func distanceValueAndUnitMatchStatsPresenter() {
+    let drive = makeDrive()
+    let vm = buildViewModel(drive: drive)
+    let stats = DriveStatsPresenter(drive: drive)
+    #expect(vm.distanceValue == stats.distanceValue)
+    #expect(vm.distanceUnit == stats.distanceUnit)
+  }
+
+  @Test
+  func durationValueAndUnitMatchStatsPresenter() {
+    let drive = makeDrive()
+    let vm = buildViewModel(drive: drive)
+    let stats = DriveStatsPresenter(drive: drive)
+    #expect(vm.durationValue == stats.durationValue)
+    #expect(vm.durationUnit == stats.durationUnit)
+  }
+
+  @Test
+  func avgSpeedValueAndUnitMatchStatsPresenter() {
+    let drive = makeDrive()
+    let vm = buildViewModel(drive: drive)
+    let stats = DriveStatsPresenter(drive: drive)
+    #expect(vm.avgSpeedValue == stats.avgSpeedValue)
+    #expect(vm.avgSpeedUnit == stats.avgSpeedUnit)
+  }
+
+  // MARK: - Map
+
+  @Test
+  func coordinatesIsEmptyWhenDriveHasNoPositions() {
+    let vm = buildViewModel(drive: makeDrive())
+    #expect(vm.coordinates.isEmpty)
+  }
+
+  @Test
+  func coordinatesMatchDriveOrderedPositions() {
+    let drive = driveWithOnePosition()
+    let vm = buildViewModel(drive: drive)
+    #expect(vm.coordinates.count == 1)
+    #expect(vm.coordinates[0].latitude == 51.5074)
+    #expect(vm.coordinates[0].longitude == -0.1278)
+  }
+
   // MARK: - Weather computed properties
 
   @Test
@@ -152,6 +228,36 @@ struct DriveDetailViewModelTests {
   func endWeatherTemperatureIsNilWhenNoWeather() {
     let vm = buildViewModel(drive: makeDrive())
     #expect(vm.endWeatherTemperature == nil)
+  }
+
+  @Test
+  func endWeatherDescriptionIsNilWhenNoWeather() {
+    let vm = buildViewModel(drive: makeDrive())
+    #expect(vm.endWeatherDescription == nil)
+  }
+
+  @Test
+  func endWeatherSymbolReturnsSymbolName() {
+    let drive = makeDrive()
+    drive.weatherReadings = [Weather(temperatureCelsius: 10.0, conditionDescription: "Cloudy", symbolName: "cloud.fill", type: .end)]
+    let vm = buildViewModel(drive: drive)
+    #expect(vm.endWeatherSymbol == "cloud.fill")
+  }
+
+  @Test
+  func endWeatherDescriptionReturnsCondition() {
+    let drive = makeDrive()
+    drive.weatherReadings = [Weather(temperatureCelsius: 10.0, conditionDescription: "Cloudy", symbolName: "cloud.fill", type: .end)]
+    let vm = buildViewModel(drive: drive)
+    #expect(vm.endWeatherDescription == "Cloudy")
+  }
+
+  @Test
+  func endWeatherTemperatureIsNonNilWhenWeatherSet() {
+    let drive = makeDrive()
+    drive.weatherReadings = [Weather(temperatureCelsius: 10.0, conditionDescription: "Cloudy", symbolName: "cloud.fill", type: .end)]
+    let vm = buildViewModel(drive: drive)
+    #expect(vm.endWeatherTemperature != nil)
   }
 
   @Test

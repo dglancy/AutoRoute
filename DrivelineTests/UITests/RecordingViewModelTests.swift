@@ -58,6 +58,65 @@ final class RecordingViewModelTests: SwiftDataBaseTestCase {
     #expect(vm.startedAt != "—")
   }
 
+  @Test
+  func startedAtReturnsDashWhenNoDriveExists() {
+    let (service, _) = makeService()
+    let vm = RecordingViewModel(driveService: service)
+    #expect(vm.startedAt == "—")
+  }
+
+  // MARK: - elapsedSeconds / distanceMetres
+
+  @Test
+  func elapsedSecondsIsZeroForFreshDrive() {
+    let vm = makeViewModel()
+    #expect(vm.elapsedSeconds == 0)
+  }
+
+  @Test
+  func distanceMetresIsZeroForFreshDrive() {
+    let vm = makeViewModel()
+    #expect(vm.distanceMetres == 0)
+  }
+
+  @Test
+  func elapsedSecondsIsZeroWhenNoDriveExists() {
+    let (service, _) = makeService()
+    let vm = RecordingViewModel(driveService: service)
+    #expect(vm.elapsedSeconds == 0)
+  }
+
+  @Test
+  func distanceMetresIsZeroWhenNoDriveExists() {
+    let (service, _) = makeService()
+    let vm = RecordingViewModel(driveService: service)
+    #expect(vm.distanceMetres == 0)
+  }
+
+  // MARK: - elapsedDisplay
+
+  @Test
+  func elapsedDisplayMatchesElapsedTimeString() {
+    let vm = makeViewModel()
+    #expect(vm.elapsedDisplay == TimeInterval(vm.elapsedSeconds).elapsedTimeString())
+  }
+
+  // MARK: - distanceValue / distanceUnit
+
+  @Test
+  func distanceValueMatchesLocalizedDistanceValueString() {
+    let vm = makeViewModel()
+    let expected = Measurement(value: vm.distanceMetres, unit: UnitLength.meters).localizedDistanceValueString()
+    #expect(vm.distanceValue == expected)
+  }
+
+  @Test
+  func distanceUnitMatchesLocalizedDistanceUnitSymbol() {
+    let vm = makeViewModel()
+    let expected = Measurement(value: vm.distanceMetres, unit: UnitLength.meters).localizedDistanceUnitSymbol()
+    #expect(vm.distanceUnit == expected)
+  }
+
   // MARK: - finishDrive
 
   @Test

@@ -199,6 +199,49 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     #expect(viewModel.recentStats.driveCount == 0)
   }
 
+  // MARK: - Stats Scope
+
+  @Test
+  func toggleStatsScopeSwitchesBetweenLast30DaysAndAllTime() {
+    let viewModel = buildViewModel()
+    #expect(viewModel.statsScopeLabel == "last 30 days")
+    viewModel.toggleStatsScope()
+    #expect(viewModel.statsScopeLabel == "all time")
+    viewModel.toggleStatsScope()
+    #expect(viewModel.statsScopeLabel == "last 30 days")
+  }
+
+  @Test
+  func statsReflectAllTimeScopeWhenToggled() {
+    let viewModel = buildViewModel()
+    viewModel.update(with: [makeDrive(daysAgo: 0), makeDrive(daysAgo: 60)])
+    #expect(viewModel.statsDriveCount == 1)
+    viewModel.toggleStatsScope()
+    #expect(viewModel.statsDriveCount == 2)
+  }
+
+  // MARK: - Start Drive
+
+  @Test
+  func startDriveSucceedsAndDoesNotShowError() {
+    let viewModel = buildViewModel()
+    let driveService = makeDriveRecordingService()
+    viewModel.startDrive(using: driveService)
+    #expect(viewModel.showingStartDriveError == false)
+    #expect(driveService.isRecording == true)
+  }
+
+  @Test
+  func startDriveFailureShowsErrorMessage() {
+    let viewModel = buildViewModel()
+    let recorder = MockLocationDataRecorderService()
+    recorder.shouldThrow = true
+    let driveService = makeDriveRecordingService(locationDataRecorder: recorder)
+    viewModel.startDrive(using: driveService)
+    #expect(viewModel.showingStartDriveError == true)
+    #expect(viewModel.startDriveErrorMessage != nil)
+  }
+
   // MARK: - Update
 
   @Test
@@ -630,6 +673,18 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   private func buildViewModel(spotlight: SpotlightIndexingService = SpotlightIndexingService(index: MockSpotlightIndex())) -> HomeViewModel {
     HomeViewModel(spotlightIndexingService: spotlight, modelContext: context!)
+  }
+
+  private func makeDriveRecordingService(locationDataRecorder: (any LocationDataRecorderServiceProtocol)? = nil) -> DriveRecordingService {
+    let locationService = LocationService()
+    let recorder = locationDataRecorder ?? LocationDataRecorderService(locationService: locationService, modelContext: context!)
+    return DriveRecordingService(
+      modelContext: context!,
+      locationService: locationService,
+      locationDataRecorder: recorder,
+      geocodingService: MockGeocodingService(),
+      weatherService: MockWeatherFetchService()
+    )
   }
 }
 

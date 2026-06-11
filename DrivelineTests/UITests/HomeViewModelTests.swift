@@ -179,6 +179,18 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   }
 
   @Test
+  func statsUseAccumulatedDistanceForFinishedDrives() {
+    let viewModel = buildViewModel()
+    let drive = makeDrive(daysAgo: 0)
+    drive.status = .finished
+    drive.endedAt = drive.startedAt.addingTimeInterval(600)
+    drive.accumulatedDistanceMetres = 12_345
+    viewModel.update(with: [drive])
+    let expected = Measurement(value: 12_345, unit: UnitLength.meters).localizedDistanceValueString()
+    #expect(viewModel.recentStats.distanceValue == expected)
+  }
+
+  @Test
   func recentStatsResetWhenUpdatedWithNoRecentDrives() {
     let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])

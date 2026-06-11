@@ -210,7 +210,7 @@ final class HomeViewModel {
 
   private func makeDisplay(for drive: Drive) -> DriveRowDisplay {
     let duration = drive.endedAt != nil ? drive.activeDurationSeconds.localizedHoursMinutesString() : nil
-    let distance = Measurement(value: drive.distanceMetres, unit: UnitLength.meters)
+    let distance = Measurement(value: drive.displayDistanceMetres, unit: UnitLength.meters)
     return DriveRowDisplay(
       dateTimeLabel: DriveStatsPresenter(drive: drive).startTimeLabel,
       formattedDistance: distance.localizedDistanceString(),
@@ -226,7 +226,7 @@ final class HomeViewModel {
   }
 
   private func driveStats(from drives: [Drive]) -> DriveStats {
-    let measurement = Measurement(value: drives.reduce(0.0) { $0 + $1.distanceMetres }, unit: UnitLength.meters)
+    let measurement = Measurement(value: drives.reduce(0.0) { $0 + $1.displayDistanceMetres }, unit: UnitLength.meters)
     return DriveStats(
       driveCount: drives.count,
       distanceValue: measurement.localizedDistanceValueString(),

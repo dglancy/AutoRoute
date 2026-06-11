@@ -21,6 +21,13 @@ extension Drive {
     }
   }
 
+  /// Distance for display purposes. Uses the incrementally-tracked `accumulatedDistanceMetres`
+  /// for finished drives (O(1)) to avoid re-walking all positions; falls back to the live
+  /// `distanceMetres` walk while a drive is still recording.
+  var displayDistanceMetres: Double {
+    status == .finished ? accumulatedDistanceMetres : distanceMetres
+  }
+
   var activeDurationSeconds: Double {
     max(0, (endedAt ?? .now).timeIntervalSince(startedAt))
   }

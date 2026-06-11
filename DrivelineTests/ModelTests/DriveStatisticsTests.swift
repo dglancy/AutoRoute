@@ -315,6 +315,45 @@ final class DriveStatisticsTests: SwiftDataBaseTestCase {
     #expect(drive.distanceMetres < 11_500)
   }
 
+  // MARK: - displayDistanceMetres
+
+  @Test
+  func displayDistanceMetresUsesAccumulatedValueWhenFinished() throws {
+    let drive = Drive(name: "Test")
+    context!.insert(drive)
+    // 0.1 degree latitude ≈ 11,132m, but accumulatedDistanceMetres should win.
+    let p1 = makePosition(latitude: 0.0, longitude: 0.0)
+    let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: .now.addingTimeInterval(60))
+    context!.insert(p1)
+    context!.insert(p2)
+    drive.positions = [p1, p2]
+    drive.status = .finished
+    drive.accumulatedDistanceMetres = 5_000
+    #expect(drive.displayDistanceMetres == 5_000)
+  }
+
+  @Test
+  func displayDistanceMetresFallsBackToComputedWhenRecording() throws {
+    let drive = Drive(name: "Test")
+    context!.insert(drive)
+    let p1 = makePosition(latitude: 0.0, longitude: 0.0)
+    let p2 = makePosition(latitude: 0.1, longitude: 0.0, timestamp: .now.addingTimeInterval(60))
+    context!.insert(p1)
+    context!.insert(p2)
+    drive.positions = [p1, p2]
+    drive.status = .recording
+    drive.accumulatedDistanceMetres = 5_000
+    #expect(drive.displayDistanceMetres == drive.distanceMetres)
+    #expect(drive.displayDistanceMetres != 5_000)
+  }
+
+  @Test
+  func displayDistanceMetresIsZeroForFinishedDriveWithNoAccumulatedDistance() throws {
+    let drive = Drive(name: "Test")
+    drive.status = .finished
+    #expect(drive.displayDistanceMetres == 0)
+  }
+
   // MARK: - maxSpeedMetresPerSecond
 
   @Test

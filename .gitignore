@@ -30,6 +30,7 @@ Package.resolved
 TestResults.xcresult/
 
 .build/
+build/
 
 # macOS
 .DS_Store

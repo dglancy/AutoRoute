@@ -100,10 +100,10 @@ Results are appended to the given CSV file, writing a header row only if the fil
 **Usage**
 
 ```
-ml-training-data-prep <input-directory> <output.csv>
+MLTrainingDataPrepTool <input-directory> <output.csv>
 ```
 
-Build and run it via the `MLTrainingDataPrepTool` scheme in Xcode, or with `xcodebuild`/`swift run` from the command line.
+Run `./build-MLTrainingDataPrepTool.sh` from the repo root to build the tool and install it to `~/bin/MLTrainingDataPrepTool` (add `~/bin` to your `PATH` if it isn't already).
 
 ## Building it yourself
 

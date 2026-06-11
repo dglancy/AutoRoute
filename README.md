@@ -55,6 +55,37 @@ You can also enable an option in the Settings app that automatically reopens a r
 
 Driveline is built to run almost entirely in the background. Rendering a live map would require keeping a large coordinate buffer in memory and continuously redrawing the UI, which is not a good trade for a drive that could last several hours. Instead, the app writes GPS points directly to the database as they arrive and renders the full map only after the drive is complete.
 
+## Project structure
+
+```
+Driveline/
+├── Driveline/                      Main app target (MVVM, SwiftUI, SwiftData)
+│   ├── AppIntents/                  Shortcuts/App Intents actions (start, finish)
+│   ├── AppLifecycle/                App entry point, bootstrap, environment, logging, constants, localization
+│   ├── Assets.xcassets/             App icons, colors, and widget background
+│   ├── Exports/                     GPX/PNG export rendering and Transferable conformances
+│   ├── Extensions/                  Small extensions on Foundation/CoreLocation/MapKit types
+│   ├── LiveActivity/                Live Activity attributes shared with the widget extension
+│   ├── Models/                      SwiftData models: Drive, Position, Weather
+│   ├── Services/                    Business logic: recording, merging, deletion, geocoding, weather, indexing
+│   │   └── Sweeps/                  Background sweep services (place names, weather backfill)
+│   └── UI/                          Screens, grouped by feature
+│       ├── Common/                  Shared views, buttons, map content, presenters used across screens
+│       ├── DriveDetail/             Drive detail and edit screens
+│       ├── FullScreenMap/           Full-screen map view
+│       ├── Home/                    Home/route list screen
+│       ├── MergeDrives/             Merge drives screen
+│       └── Recording/               In-progress recording screen
+├── DriveWidgetExtension/           Lock Screen / Dynamic Island Live Activity widget
+├── DrivelineTests/                 Unit tests (Swift Testing), mirroring the app's folder structure
+├── DrivelineUITests/               XCTest UI tests
+├── MLTrainingDataPrepTool/         Command-line tool for building ML training datasets from GPX exports
+├── MLTrainingDataPrepToolTests/    Unit tests for the ML training data prep tool
+└── Settings.bundle/                In-app Settings.app bundle
+```
+
+Each screen-level View has a paired `<Screen>ViewModel` living alongside it, following the MVVM conventions.
+
 ## Tech
 
 **Language and frameworks**
@@ -105,7 +136,7 @@ MLTrainingDataPrepTool <input-directory> <output.csv>
 
 Run `./build-MLTrainingDataPrepTool.sh` from the repo root to build the tool and install it to `~/bin/MLTrainingDataPrepTool` (add `~/bin` to your `PATH` if it isn't already).
 
-## Building it yourself
+## Building the iOS App yourself
 
 **Requirements**
 

@@ -44,6 +44,7 @@ final class PlaceNameSweepService: SweepServiceProtocol {
     guard !needsRetry.isEmpty else { return }
 
     for drive in needsRetry {
+      guard !Task.isCancelled else { return }
       if drive.startPlaceName == nil, let first = drive.orderedPositions.first {
         let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
         drive.startPlaceName = await geocodingService.reverseGeocode(location: location)

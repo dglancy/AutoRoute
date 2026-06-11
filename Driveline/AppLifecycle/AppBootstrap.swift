@@ -105,6 +105,7 @@ enum AppBootstrap {
       }
       let sweepTask = Task { @MainActor in
         await service.sweep()
+        guard !Task.isCancelled else { return }
         processingTask.setTaskCompleted(success: true)
       }
       processingTask.expirationHandler = {

@@ -42,6 +42,7 @@ final class WeatherSweepService: SweepServiceProtocol {
     guard !needsRetry.isEmpty else { return }
 
     for drive in needsRetry {
+      guard !Task.isCancelled else { return }
       if drive.startWeather == nil, let first = drive.orderedPositions.first {
         let location = CLLocation(latitude: first.latitude, longitude: first.longitude)
         if let weather = try? await weatherService.fetchWeather(at: location, type: .start, date: drive.startedAt) {

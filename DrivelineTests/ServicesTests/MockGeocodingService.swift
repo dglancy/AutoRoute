@@ -16,10 +16,12 @@ final class MockGeocodingService: GeocodingServiceProtocol {
 
   private(set) var geocodedLocations: [CLLocation] = []
   var result: String? = "Test Place"
+  var onGeocode: (() -> Void)?
 
   // MARK: - GeocodingServiceProtocol
 
   func reverseGeocode(location: CLLocation) async -> String? {
+    onGeocode?()
     geocodedLocations.append(location)
     return result
   }

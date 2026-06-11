@@ -136,7 +136,7 @@ MLTrainingDataPrepTool <input-directory> <output.csv>
 
 Run `./build-MLTrainingDataPrepTool.sh` from the repo root to build the tool and install it to `~/bin/MLTrainingDataPrepTool` (add `~/bin` to your `PATH` if it isn't already).
 
-## Building the iOS App yourself
+## Building the iOS App
 
 **Requirements**
 

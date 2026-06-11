@@ -19,21 +19,6 @@ protocol SpotlightIndexProtocol: AnyObject {
 
 extension CSSearchableIndex: SpotlightIndexProtocol {}
 
-// MARK: - Environment Key
-
-import SwiftUI
-
-private struct SpotlightIndexingServiceKey: EnvironmentKey {
-  static let defaultValue: SpotlightIndexingService? = nil
-}
-
-extension EnvironmentValues {
-  var spotlightIndexingService: SpotlightIndexingService? {
-    get { self[SpotlightIndexingServiceKey.self] }
-    set { self[SpotlightIndexingServiceKey.self] = newValue }
-  }
-}
-
 // MARK: - SpotlightIndexingService
 
 @MainActor

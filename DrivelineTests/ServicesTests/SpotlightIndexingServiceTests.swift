@@ -6,7 +6,7 @@
 //
 
 @testable import Driveline
-import CoreSpotlight
+internal import CoreSpotlight
 import Foundation
 import Testing
 

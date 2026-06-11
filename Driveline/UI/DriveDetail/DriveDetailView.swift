@@ -15,16 +15,14 @@ struct DriveDetailView: View {
 
   @State private var viewModel: DriveDetailViewModel
   @Environment(\.dismiss) private var dismiss
-  @Environment(\.modelContext) private var modelContext
   @Environment(\.colorScheme) private var colorScheme
-  @Environment(\.spotlightIndexingService) private var spotlightIndexingService
 
   private let mapHeight: CGFloat = 280
 
   // MARK: - Lifecycle
 
-  init(drive: Drive) {
-    _viewModel = State(initialValue: DriveDetailViewModel(drive: drive))
+  init(drive: Drive, spotlightIndexingService: SpotlightIndexingService, modelContext: ModelContext) {
+    _viewModel = State(initialValue: DriveDetailViewModel(drive: drive, spotlightIndexingService: spotlightIndexingService, modelContext: modelContext))
   }
 
   // MARK: - Body
@@ -73,10 +71,6 @@ struct DriveDetailView: View {
       }
     }
     .toolbar(.hidden, for: .navigationBar)
-    .onAppear {
-      viewModel.modelContext = modelContext
-      viewModel.spotlightIndexingService = spotlightIndexingService
-    }
     .modifier(FullScreenMapModifier(viewModel: viewModel))
     .modifier(DeleteDriveAlertModifier(viewModel: viewModel, dismiss: { dismiss() }))
     .modifier(EditDriveSheetModifier(viewModel: viewModel))
@@ -303,7 +297,7 @@ private struct EditDriveSheetModifier: ViewModifier {
 
   func body(content: Content) -> some View {
     content.sheet(isPresented: $viewModel.showingEditDrive) {
-      EditDriveView(drive: viewModel.drive)
+      EditDriveView(drive: viewModel.drive, spotlightIndexingService: viewModel.spotlightIndexingService)
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
@@ -335,7 +329,7 @@ private struct DriveOptionsDialogModifier: ViewModifier {
   let container = PreviewSampleData.previewContainer()
   let drive = PreviewSampleData.sampleDrive(in: container.mainContext)
   return NavigationStack {
-    DriveDetailView(drive: drive)
+    DriveDetailView(drive: drive, spotlightIndexingService: SpotlightIndexingService(), modelContext: container.mainContext)
   }
   .modelContainer(container)
 }

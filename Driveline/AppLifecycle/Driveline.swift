@@ -41,9 +41,8 @@ struct Driveline: App {
 
   var body: some Scene {
     WindowGroup {
-      HomeView()
+      HomeView(spotlightIndexingService: spotlightIndexingService, modelContext: modelContainer.mainContext)
         .environment(driveService)
-        .environment(\.spotlightIndexingService, spotlightIndexingService)
         .onChange(of: scenePhase) { _, newPhase in
           switch newPhase {
           case .active:

@@ -18,7 +18,7 @@ struct DriveDetailViewModelTests {
 
   @Test
   func showingFullScreenMapIsFalseByDefault() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.showingFullScreenMap == false)
   }
 
@@ -26,7 +26,7 @@ struct DriveDetailViewModelTests {
 
   @Test
   func nameReturnsDriveName() {
-    let vm = DriveDetailViewModel(drive: makeDrive(name: "Dublin to Cork"))
+    let vm = buildViewModel(drive: makeDrive(name: "Dublin to Cork"))
     #expect(vm.name == "Dublin to Cork")
   }
 
@@ -34,7 +34,7 @@ struct DriveDetailViewModelTests {
   func startPlaceReturnsDriveStartPlaceName() {
     let drive = makeDrive()
     drive.startPlaceName = "Home"
-    let vm = DriveDetailViewModel(drive: drive)
+    let vm = buildViewModel(drive: drive)
     #expect(vm.startPlace == "Home")
   }
 
@@ -42,19 +42,19 @@ struct DriveDetailViewModelTests {
   func endPlaceReturnsDriveEndPlaceName() {
     let drive = makeDrive()
     drive.endPlaceName = "Office"
-    let vm = DriveDetailViewModel(drive: drive)
+    let vm = buildViewModel(drive: drive)
     #expect(vm.endPlace == "Office")
   }
 
   @Test
   func startPlaceIsNilWhenNotSet() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.startPlace == nil)
   }
 
   @Test
   func endPlaceIsNilWhenNotSet() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.endPlace == nil)
   }
 
@@ -62,25 +62,25 @@ struct DriveDetailViewModelTests {
   func arrivalTimeIsNilWhenDriveHasNoEndDate() {
     let drive = makeDrive()
     drive.endedAt = nil
-    let vm = DriveDetailViewModel(drive: drive)
+    let vm = buildViewModel(drive: drive)
     #expect(vm.arrivalTime == nil)
   }
 
   @Test
   func arrivalTimeIsNonNilWhenDriveHasEndDate() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.arrivalTime != nil)
   }
 
   @Test
   func trackPointsReflectsZeroPositionCount() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.trackPoints == "0")
   }
 
   @Test
   func triggerDisplayNameMatchesDriveTrigger() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.triggerDisplayName == Drive.RecordingTrigger.manual.displayName)
   }
 
@@ -88,7 +88,7 @@ struct DriveDetailViewModelTests {
 
   @Test
   func hasWeatherIsFalseWhenNoWeatherSet() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.hasWeather == false)
   }
 
@@ -96,13 +96,13 @@ struct DriveDetailViewModelTests {
   func hasWeatherIsTrueWhenStartWeatherSet() {
     let drive = makeDrive()
     drive.weatherReadings = [Weather(temperatureCelsius: 20.0, conditionDescription: "Sunny", symbolName: "sun.max.fill", type: .start)]
-    let vm = DriveDetailViewModel(drive: drive)
+    let vm = buildViewModel(drive: drive)
     #expect(vm.hasWeather == true)
   }
 
   @Test
   func startWeatherSymbolIsNilWhenNoWeather() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.startWeatherSymbol == nil)
   }
 
@@ -110,13 +110,13 @@ struct DriveDetailViewModelTests {
   func startWeatherSymbolReturnsSymbolName() {
     let drive = makeDrive()
     drive.weatherReadings = [Weather(temperatureCelsius: 20.0, conditionDescription: "Sunny", symbolName: "sun.max.fill", type: .start)]
-    let vm = DriveDetailViewModel(drive: drive)
+    let vm = buildViewModel(drive: drive)
     #expect(vm.startWeatherSymbol == "sun.max.fill")
   }
 
   @Test
   func startWeatherDescriptionIsNilWhenNoWeather() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.startWeatherDescription == nil)
   }
 
@@ -124,13 +124,13 @@ struct DriveDetailViewModelTests {
   func startWeatherDescriptionReturnsCondition() {
     let drive = makeDrive()
     drive.weatherReadings = [Weather(temperatureCelsius: 20.0, conditionDescription: "Partly Cloudy", symbolName: "cloud.sun.fill", type: .start)]
-    let vm = DriveDetailViewModel(drive: drive)
+    let vm = buildViewModel(drive: drive)
     #expect(vm.startWeatherDescription == "Partly Cloudy")
   }
 
   @Test
   func startWeatherTemperatureIsNilWhenNoWeather() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.startWeatherTemperature == nil)
   }
 
@@ -138,31 +138,31 @@ struct DriveDetailViewModelTests {
   func startWeatherTemperatureIsNonNilWhenWeatherSet() {
     let drive = makeDrive()
     drive.weatherReadings = [Weather(temperatureCelsius: 20.0, conditionDescription: "Sunny", symbolName: "sun.max.fill", type: .start)]
-    let vm = DriveDetailViewModel(drive: drive)
+    let vm = buildViewModel(drive: drive)
     #expect(vm.startWeatherTemperature != nil)
   }
 
   @Test
   func endWeatherSymbolIsNilWhenNoWeather() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.endWeatherSymbol == nil)
   }
 
   @Test
   func endWeatherTemperatureIsNilWhenNoWeather() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.endWeatherTemperature == nil)
   }
 
   @Test
   func weatherAttributionIsNilByDefault() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.weatherAttribution == nil)
   }
 
   @Test
   func weatherAttributionLegalURLIsNilWhenNoAttribution() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.weatherAttributionLegalURL == nil)
   }
 
@@ -170,13 +170,13 @@ struct DriveDetailViewModelTests {
 
   @Test
   func canExportIsFalseWhenDriveHasNoPositions() {
-    let vm = DriveDetailViewModel(drive: makeDrive())
+    let vm = buildViewModel(drive: makeDrive())
     #expect(vm.canExport == false)
   }
 
   @Test
   func canExportIsTrueWhenDriveHasPositions() {
-    let vm = DriveDetailViewModel(drive: driveWithOnePosition())
+    let vm = buildViewModel(drive: driveWithOnePosition())
     #expect(vm.canExport == true)
   }
 
@@ -185,14 +185,14 @@ struct DriveDetailViewModelTests {
   @Test
   func gpxExportWrapsDrive() {
     let drive = driveWithOnePosition()
-    let vm = DriveDetailViewModel(drive: drive)
+    let vm = buildViewModel(drive: drive)
     #expect(vm.gpxExport.drive === drive)
   }
 
   @Test
   func pngExportWrapsDrive() {
     let drive = driveWithOnePosition()
-    let vm = DriveDetailViewModel(drive: drive)
+    let vm = buildViewModel(drive: drive)
     #expect(vm.pngExport.drive === drive)
   }
 
@@ -203,8 +203,7 @@ struct DriveDetailViewModelTests {
     let context = try makeContext()
     let drive = makeDrive()
     context.insert(drive)
-    let vm = DriveDetailViewModel(drive: drive)
-    vm.modelContext = context
+    let vm = buildViewModel(drive: drive, modelContext: context)
 
     vm.deleteDrive()
 
@@ -218,9 +217,7 @@ struct DriveDetailViewModelTests {
     let driveID = drive.id
     context.insert(drive)
     let mockSpotlight = MockSpotlightIndex()
-    let vm = DriveDetailViewModel(drive: drive)
-    vm.modelContext = context
-    vm.spotlightIndexingService = SpotlightIndexingService(index: mockSpotlight)
+    let vm = buildViewModel(drive: drive, modelContext: context, spotlight: SpotlightIndexingService(index: mockSpotlight))
 
     vm.deleteDrive()
 
@@ -237,6 +234,15 @@ struct DriveDetailViewModelTests {
     let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
     let container = try ModelContainer(for: schema, configurations: [configuration])
     return ModelContext(container)
+  }
+
+  private func buildViewModel(
+    drive: Drive,
+    modelContext: ModelContext? = nil,
+    spotlight: SpotlightIndexingService = SpotlightIndexingService(index: MockSpotlightIndex())
+  ) -> DriveDetailViewModel {
+    let context = try! modelContext ?? makeContext()
+    return DriveDetailViewModel(drive: drive, spotlightIndexingService: spotlight, modelContext: context)
   }
 
   private func makeDrive(name: String = "Test Drive") -> Drive {

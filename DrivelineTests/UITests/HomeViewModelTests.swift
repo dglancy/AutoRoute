@@ -17,7 +17,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func emptyDrivesProducesNoSections() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [])
     #expect(viewModel.sections.isEmpty)
   }
@@ -26,7 +26,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func todayDriveCreatesTodaySection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     #expect(viewModel.sections.count == 1)
     #expect(viewModel.sections[0].title == "Today")
@@ -34,7 +34,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func yesterdayDriveCreatesYesterdaySection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 1)])
     #expect(viewModel.sections.count == 1)
     #expect(viewModel.sections[0].title == "Yesterday")
@@ -42,7 +42,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func routeTwoDaysAgoCreatesDayNameSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let drive = makeDrive(daysAgo: 2)
     viewModel.update(with: [drive])
     let expected = drive.startedAt.formatted(.dateTime.weekday(.wide))
@@ -52,7 +52,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func routeSixDaysAgoStillCreatesDayNameSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let drive = makeDrive(daysAgo: 6)
     viewModel.update(with: [drive])
     let expected = drive.startedAt.formatted(.dateTime.weekday(.wide))
@@ -62,7 +62,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func routeSevenDaysAgoCreatesMonthYearSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let drive = makeDrive(daysAgo: 7)
     viewModel.update(with: [drive])
     let expected = drive.startedAt.formatted(.dateTime.month(.wide).year())
@@ -72,7 +72,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func routeThirtyDaysAgoCreatesMonthYearSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let drive = makeDrive(daysAgo: 30)
     viewModel.update(with: [drive])
     let expected = drive.startedAt.formatted(.dateTime.month(.wide).year())
@@ -84,7 +84,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func drivesOnSameDayAreGroupedIntoOneSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let morning = makeDrive(name: "Morning", daysAgo: 0, hour: 8)
     let afternoon = makeDrive(name: "Afternoon", daysAgo: 0, hour: 14)
     viewModel.update(with: [morning, afternoon])
@@ -94,7 +94,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func drivesOnDifferentDaysProduceSeparateSections() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let today = makeDrive(name: "Today", daysAgo: 0)
     let yesterday = makeDrive(name: "Yesterday", daysAgo: 1)
     let older = makeDrive(name: "Older", daysAgo: 10)
@@ -104,7 +104,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func drivesFromSameOlderMonthAreGroupedIntoOneSection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let a = makeDrive(name: "Drive A", daysAgo: 30, hour: 8)
     let b = makeDrive(name: "Drive B", daysAgo: 30, hour: 14)
     viewModel.update(with: [a, b])
@@ -122,7 +122,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func sectionsAreOrderedNewestFirst() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let today = makeDrive(name: "Today", daysAgo: 0)
     let yesterday = makeDrive(name: "Yesterday", daysAgo: 1)
     let lastWeek = makeDrive(name: "Last Week", daysAgo: 5)
@@ -133,7 +133,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func drivesWithinSectionAreOrderedNewestFirst() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let morning = makeDrive(name: "Morning", daysAgo: 0, hour: 8)
     let afternoon = makeDrive(name: "Afternoon", daysAgo: 0, hour: 14)
     viewModel.update(with: [morning, afternoon])
@@ -146,21 +146,21 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func recentDriveCountIsZeroWhenNoDrives() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [])
     #expect(viewModel.recentStats.driveCount == 0)
   }
 
   @Test
   func recentDriveCountIsZeroWhenAllDrivesOlderThan30Days() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 31), makeDrive(daysAgo: 60)])
     #expect(viewModel.recentStats.driveCount == 0)
   }
 
   @Test
   func recentDriveCountReflectsOnlyDrivesWithinWindow() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [
       makeDrive(daysAgo: 0),
       makeDrive(daysAgo: 5),
@@ -171,7 +171,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func recentDistanceUnitMatchesLocale() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     let expectedUnit = Measurement(value: 0.0, unit: UnitLength.meters).localizedDistanceUnitSymbol()
     #expect(viewModel.recentStats.distanceUnit == expectedUnit)
@@ -179,7 +179,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func recentStatsResetWhenUpdatedWithNoRecentDrives() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     #expect(viewModel.recentStats.driveCount == 1)
     viewModel.update(with: [makeDrive(daysAgo: 60)])
@@ -190,7 +190,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func callingUpdateReplacesPreviousSections() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(daysAgo: 0)])
     #expect(viewModel.sections.count == 1)
     viewModel.update(with: [])
@@ -199,7 +199,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func sectionsReflectLatestDriveSet() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "A", daysAgo: 0)])
     viewModel.update(with: [makeDrive(name: "B", daysAgo: 0), makeDrive(name: "C", daysAgo: 1)])
     #expect(viewModel.sections.count == 2)
@@ -210,7 +210,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func emptyQueryShowsAllDrives() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "A", daysAgo: 0), makeDrive(name: "B", daysAgo: 1)])
     viewModel.applySearch(text: "")
     #expect(viewModel.sections.flatMap(\.rows).count == 2)
@@ -218,7 +218,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func searchByDisplayNameFiltersResults() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "Morning Commute", daysAgo: 0), makeDrive(name: "Evening Run", daysAgo: 0)])
     viewModel.applySearch(text: "Morning")
     let rows = viewModel.sections.flatMap(\.rows)
@@ -228,7 +228,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func searchByStartPlaceNameFiltersResults() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let match = makeDrive(name: "A", daysAgo: 0)
     match.startPlaceName = "Home"
     let noMatch = makeDrive(name: "B", daysAgo: 0)
@@ -242,7 +242,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func searchByEndPlaceNameFiltersResults() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let match = makeDrive(name: "A", daysAgo: 0)
     match.endPlaceName = "Airport"
     let noMatch = makeDrive(name: "B", daysAgo: 0)
@@ -256,7 +256,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func searchIsCaseInsensitive() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "morning commute", daysAgo: 0)])
     viewModel.applySearch(text: "MORNING")
     #expect(viewModel.sections.flatMap(\.rows).count == 1)
@@ -264,7 +264,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func searchWithNoMatchReturnsEmptySections() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "Home to Office", daysAgo: 0)])
     viewModel.applySearch(text: "zzznomatch")
     #expect(viewModel.sections.isEmpty)
@@ -272,7 +272,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func clearingSearchRestoresAllDrives() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.update(with: [makeDrive(name: "A", daysAgo: 0), makeDrive(name: "B", daysAgo: 1)])
     viewModel.applySearch(text: "A")
     #expect(viewModel.sections.flatMap(\.rows).count == 1)
@@ -282,7 +282,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func searchIsPreservedWhenDrivesUpdate() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let drive1 = makeDrive(name: "Morning Commute", daysAgo: 0)
     let drive2 = makeDrive(name: "Evening Run", daysAgo: 0)
     viewModel.update(with: [drive1])
@@ -297,26 +297,26 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func isSelectModeFalseOnInitialization() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     #expect(viewModel.isSelectMode == false)
   }
 
   @Test
   func sectionsAreEmptyOnInitializationSoSelectButtonIsHidden() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     #expect(viewModel.sections.isEmpty)
   }
 
   @Test
   func enterSelectModeSetsIsSelectModeTrue() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.enterSelectMode()
     #expect(viewModel.isSelectMode == true)
   }
 
   @Test
   func enterSelectModeClearsAnyExistingSelection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.toggleSelection(for: UUID())
     viewModel.enterSelectMode()
     #expect(viewModel.selectedDriveIDs.isEmpty)
@@ -324,7 +324,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func exitSelectModeSetsIsSelectModeFalse() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.enterSelectMode()
     viewModel.exitSelectMode()
     #expect(viewModel.isSelectMode == false)
@@ -332,7 +332,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func exitSelectModeClearsSelection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.enterSelectMode()
     viewModel.toggleSelection(for: UUID())
     viewModel.exitSelectMode()
@@ -341,7 +341,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func toggleSelectionAddsIDWhenNotSelected() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let id = UUID()
     viewModel.toggleSelection(for: id)
     #expect(viewModel.selectedDriveIDs.contains(id))
@@ -349,7 +349,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func toggleSelectionRemovesIDWhenAlreadySelected() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let id = UUID()
     viewModel.toggleSelection(for: id)
     viewModel.toggleSelection(for: id)
@@ -358,7 +358,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func selectedDrivesReturnsOnlySelectedDrives() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let drive1 = makeDrive(name: "A", daysAgo: 0)
     let drive2 = makeDrive(name: "B", daysAgo: 1)
     viewModel.update(with: [drive1, drive2])
@@ -372,7 +372,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func canMergeIsTrueWhenExactlyTwoDrivesSelected() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.toggleSelection(for: UUID())
     viewModel.toggleSelection(for: UUID())
     #expect(viewModel.canMerge == true)
@@ -380,33 +380,33 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func canMergeIsFalseWithFewerThanTwoDrivesSelected() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.toggleSelection(for: UUID())
     #expect(viewModel.canMerge == false)
   }
 
   @Test
   func canDeleteIsTrueWhenAtLeastOneDriveIsSelected() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.toggleSelection(for: UUID())
     #expect(viewModel.canDelete == true)
   }
 
   @Test
   func canDeleteIsFalseWithNoSelection() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     #expect(viewModel.canDelete == false)
   }
 
   @Test
   func selectionCountTextShowsPlaceholderWhenNothingSelected() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     #expect(viewModel.selectionCountText == "Select 2 drives to merge")
   }
 
   @Test
   func selectionCountTextShowsCountWhenDrivesSelected() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.toggleSelection(for: UUID())
     viewModel.toggleSelection(for: UUID())
     #expect(viewModel.selectionCountText == "2 selected")
@@ -414,7 +414,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func deleteConfirmationMessageIncludesSelectionCount() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.toggleSelection(for: UUID())
     viewModel.toggleSelection(for: UUID())
     viewModel.toggleSelection(for: UUID())
@@ -423,7 +423,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func deleteConfirmationMessageUsesSingularForOneDrive() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     viewModel.toggleSelection(for: UUID())
     #expect(viewModel.deleteConfirmationMessage.contains("1 drive "))
     #expect(!viewModel.deleteConfirmationMessage.contains("1 drives"))
@@ -433,7 +433,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func triggerMergeSetsShowingMergeSheetTrue() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let drive1 = makeDrive(name: "A", daysAgo: 0)
     let drive2 = makeDrive(name: "B", daysAgo: 1)
     viewModel.update(with: [drive1, drive2])
@@ -445,7 +445,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   @Test
   func triggerMergeSortsDrivesToMergeChronologically() {
-    let viewModel = HomeViewModel()
+    let viewModel = buildViewModel()
     let older = makeDrive(name: "Older", daysAgo: 2)
     let newer = makeDrive(name: "Newer", daysAgo: 0)
     viewModel.update(with: [older, newer])
@@ -461,8 +461,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   @Test
   func deleteDrivesRemovesDrivesFromContext() throws {
     let drive = insertDrive()
-    let viewModel = HomeViewModel()
-    viewModel.modelContext = context!
+    let viewModel = buildViewModel()
     viewModel.deleteDrives([drive])
     #expect(try count(where: #Predicate<Drive> { _ in true }) == 0)
   }
@@ -473,9 +472,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     let spotlightService = SpotlightIndexingService(index: mockSpotlight)
     let drive = insertDrive()
     let driveID = drive.id
-    let viewModel = HomeViewModel()
-    viewModel.modelContext = context!
-    viewModel.spotlightIndexingService = spotlightService
+    let viewModel = buildViewModel(spotlight: spotlightService)
 
     viewModel.deleteDrives([drive])
 
@@ -488,8 +485,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   @Test
   func deleteDrivesAtIndexSetRemovesCorrectDrive() throws {
     let drive = insertDrive()
-    let viewModel = HomeViewModel()
-    viewModel.modelContext = context!
+    let viewModel = buildViewModel()
     viewModel.update(with: [drive])
     viewModel.deleteDrives(at: IndexSet([0]), in: viewModel.sections[0])
     #expect(try count(where: #Predicate<Drive> { _ in true }) == 0)
@@ -501,8 +497,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   func mergeDrivesCreatesOneDriveAndDeletesOriginals() throws {
     let first = insertDrive(name: "First", startOffset: 0, endOffset: 3600)
     let second = insertDrive(name: "Second", startOffset: 3600, endOffset: 7200)
-    let viewModel = HomeViewModel()
-    viewModel.modelContext = context!
+    let viewModel = buildViewModel()
     viewModel.mergeDrives(orderedDrives: [first, second], mergedName: "Merged")
     #expect(try count(where: #Predicate<Drive> { _ in true }) == 1)
   }
@@ -511,8 +506,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   func mergeDrivesSetsSuppliedName() throws {
     let first = insertDrive(name: "First", startOffset: 0, endOffset: 3600)
     let second = insertDrive(name: "Second", startOffset: 3600, endOffset: 7200)
-    let viewModel = HomeViewModel()
-    viewModel.modelContext = context!
+    let viewModel = buildViewModel()
     viewModel.mergeDrives(orderedDrives: [first, second], mergedName: "Morning Commute")
     let drives = try context!.fetch(FetchDescriptor<Drive>())
     #expect(drives[0].name == "Morning Commute")
@@ -525,8 +519,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     let t2 = Date(timeIntervalSinceReferenceDate: 7200)
     let first = insertDrive(name: "First", startOffset: t0.timeIntervalSinceReferenceDate, endOffset: t1.timeIntervalSinceReferenceDate)
     let second = insertDrive(name: "Second", startOffset: t1.timeIntervalSinceReferenceDate, endOffset: t2.timeIntervalSinceReferenceDate)
-    let viewModel = HomeViewModel()
-    viewModel.modelContext = context!
+    let viewModel = buildViewModel()
     viewModel.mergeDrives(orderedDrives: [first, second], mergedName: "Merged")
     let drives = try context!.fetch(FetchDescriptor<Drive>())
     #expect(drives[0].startedAt == t0)
@@ -539,8 +532,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     first.startPlaceName = "Home"
     let second = insertDrive(name: "Second", startOffset: 3600, endOffset: 7200)
     second.endPlaceName = "Office"
-    let viewModel = HomeViewModel()
-    viewModel.modelContext = context!
+    let viewModel = buildViewModel()
     viewModel.mergeDrives(orderedDrives: [first, second], mergedName: "Merged")
     let drives = try context!.fetch(FetchDescriptor<Drive>())
     #expect(drives[0].startPlaceName == "Home")
@@ -553,8 +545,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     first.positions = [makePosition(latitude: 1)]
     let second = insertDrive(name: "Second", startOffset: 3600, endOffset: 7200)
     second.positions = [makePosition(latitude: 2), makePosition(latitude: 3)]
-    let viewModel = HomeViewModel()
-    viewModel.modelContext = context!
+    let viewModel = buildViewModel()
     viewModel.mergeDrives(orderedDrives: [first, second], mergedName: "Merged")
     let drives = try context!.fetch(FetchDescriptor<Drive>())
     #expect(drives[0].positions?.count == 3)
@@ -563,8 +554,7 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
   @Test
   func mergeDrivesWithNotTwoDrivesDoesNothing() throws {
     let drive = insertDrive()
-    let viewModel = HomeViewModel()
-    viewModel.modelContext = context!
+    let viewModel = buildViewModel()
     viewModel.mergeDrives(orderedDrives: [drive], mergedName: "Should not merge")
     #expect(try count(where: #Predicate<Drive> { _ in true }) == 1)
   }
@@ -581,6 +571,10 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
 
   private func makePosition(latitude: Double) -> Position {
     Position(latitude: latitude, longitude: 0, altitude: 0, horizontalAccuracy: 5, verticalAccuracy: 5, course: 0, courseAccuracy: 0, speed: 0, speedAccuracy: 0)
+  }
+
+  private func buildViewModel(spotlight: SpotlightIndexingService = SpotlightIndexingService(index: MockSpotlightIndex())) -> HomeViewModel {
+    HomeViewModel(spotlightIndexingService: spotlight, modelContext: context!)
   }
 }
 

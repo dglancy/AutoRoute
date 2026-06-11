@@ -28,8 +28,8 @@ final class DriveDetailViewModel {
 
   @ObservationIgnored let drive: Drive
   @ObservationIgnored private let stats: DriveStatsPresenter
-  @ObservationIgnored var modelContext: ModelContext?
-  @ObservationIgnored var spotlightIndexingService: SpotlightIndexingService?
+  @ObservationIgnored private let modelContext: ModelContext
+  @ObservationIgnored let spotlightIndexingService: SpotlightIndexingService
 
   // MARK: - Computed Properties
 
@@ -85,9 +85,11 @@ final class DriveDetailViewModel {
 
   // MARK: - Lifecycle
 
-  init(drive: Drive) {
+  init(drive: Drive, spotlightIndexingService: SpotlightIndexingService, modelContext: ModelContext) {
     self.drive = drive
     self.stats = DriveStatsPresenter(drive: drive)
+    self.spotlightIndexingService = spotlightIndexingService
+    self.modelContext = modelContext
   }
 
   // MARK: - Actions
@@ -100,7 +102,6 @@ final class DriveDetailViewModel {
   }
 
   func deleteDrive() {
-    guard let modelContext else { return }
     DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete([drive])
   }
 

@@ -13,15 +13,23 @@ struct HomeView: View {
 
   // MARK: - Properties
 
-  @Environment(\.modelContext) private var modelContext
   @Environment(DriveRecordingService.self) private var driveService
-  @Environment(\.spotlightIndexingService) private var spotlightIndexingService
   @Environment(\.openURL) private var openURL
 
   @Query(sort: \Drive.startedAt, order: .reverse) private var drives: [Drive]
 
-  @State private var viewModel = HomeViewModel()
+  private let modelContext: ModelContext
+  private let spotlightIndexingService: SpotlightIndexingService
+  @State private var viewModel: HomeViewModel
   @State private var searchText = ""
+
+  // MARK: - Lifecycle
+
+  init(spotlightIndexingService: SpotlightIndexingService, modelContext: ModelContext) {
+    self.spotlightIndexingService = spotlightIndexingService
+    self.modelContext = modelContext
+    _viewModel = State(initialValue: HomeViewModel(spotlightIndexingService: spotlightIndexingService, modelContext: modelContext))
+  }
 
   // MARK: - Body
 
@@ -48,8 +56,6 @@ struct HomeView: View {
           viewModel.showingRecordingScreen = isRecording
         }
         .onAppear {
-          viewModel.modelContext = modelContext
-          viewModel.spotlightIndexingService = spotlightIndexingService
           viewModel.showingRecordingScreen = driveService.isRecording
         }
     }
@@ -147,7 +153,7 @@ struct HomeView: View {
       }
       .contentMargins(.top, 0, for: .scrollContent)
       .navigationDestination(for: Drive.self) { drive in
-        DriveDetailView(drive: drive)
+        DriveDetailView(drive: drive, spotlightIndexingService: spotlightIndexingService, modelContext: modelContext)
       }
 
       if viewModel.isSelectMode {
@@ -323,7 +329,7 @@ private struct MergeDrivesSheetModifier: ViewModifier {
   let locationDataRecorder = LocationDataRecorderService(locationService: locationService, modelContext: container.mainContext)
   let driveService = DriveRecordingService(modelContext: container.mainContext, locationService: locationService, locationDataRecorder: locationDataRecorder)
 
-  return HomeView()
+  return HomeView(spotlightIndexingService: SpotlightIndexingService(), modelContext: container.mainContext)
     .modelContainer(container)
     .environment(driveService)
 }

@@ -40,8 +40,8 @@ final class HomeViewModel {
 
   // MARK: - Properties
 
-  @ObservationIgnored var modelContext: ModelContext?
-  @ObservationIgnored var spotlightIndexingService: SpotlightIndexingService?
+  @ObservationIgnored private let modelContext: ModelContext
+  @ObservationIgnored private let spotlightIndexingService: SpotlightIndexingService
   @ObservationIgnored private var drives: [Drive] = []
   @ObservationIgnored private var currentSearchText: String = ""
 
@@ -59,6 +59,13 @@ final class HomeViewModel {
   var showingStartDriveError: Bool = false
   var showingRecordingScreen: Bool = false
   var showingMergeSheet: Bool = false
+
+  // MARK: - Lifecycle
+
+  init(spotlightIndexingService: SpotlightIndexingService, modelContext: ModelContext) {
+    self.spotlightIndexingService = spotlightIndexingService
+    self.modelContext = modelContext
+  }
 
   // MARK: - Computed Properties
 
@@ -145,7 +152,6 @@ final class HomeViewModel {
   }
 
   func deleteDrives(_ drives: [Drive]) {
-    guard let modelContext else { return }
     DriveDeletionService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).delete(drives)
   }
 
@@ -154,7 +160,6 @@ final class HomeViewModel {
   }
 
   func mergeDrives(orderedDrives: [Drive], mergedName: String) {
-    guard let modelContext else { return }
     DriveMergeService(modelContext: modelContext, spotlightIndexingService: spotlightIndexingService).merge(orderedDrives: orderedDrives, mergedName: mergedName)
   }
 

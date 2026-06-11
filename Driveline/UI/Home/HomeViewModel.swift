@@ -75,7 +75,10 @@ final class HomeViewModel {
   var canDelete: Bool { !selectedDriveIDs.isEmpty }
 
   var deleteConfirmationMessage: String {
-    String(localized: "\(selectedDriveIDs.count) drives and all their data will be permanently deleted.")
+    String(
+      localized: "\(selectedDriveIDs.count) drives and all their data will be permanently deleted.",
+      comment: "Confirmation message for deleting selected drives."
+    )
   }
 
   var selectionCountText: String {

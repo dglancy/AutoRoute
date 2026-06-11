@@ -421,6 +421,14 @@ final class HomeViewModelTests: SwiftDataBaseTestCase {
     #expect(viewModel.deleteConfirmationMessage.contains("3"))
   }
 
+  @Test
+  func deleteConfirmationMessageUsesSingularForOneDrive() {
+    let viewModel = HomeViewModel()
+    viewModel.toggleSelection(for: UUID())
+    #expect(viewModel.deleteConfirmationMessage.contains("1 drive "))
+    #expect(!viewModel.deleteConfirmationMessage.contains("1 drives"))
+  }
+
   // MARK: - Trigger Merge
 
   @Test

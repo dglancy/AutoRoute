@@ -192,14 +192,15 @@ final class DriveStatisticsTests: SwiftDataBaseTestCase {
   }
 
   @Test
-  func sinuosityIsZeroForRoundTrip() {
+  func loopProducesHighSinuosity() {
+    // Travel out and back to the start: long path, ~zero straight-line distance.
     let positions = [
       position(offset: 0, latitude: 0.0, longitude: 0.0),
       position(offset: 1, latitude: 0.1, longitude: 0.0),
       position(offset: 2, latitude: 0.0, longitude: 0.0)
     ]
     let drive = drive(with: positions, duration: 2)
-    #expect(drive.sinuosity == 0)
+    #expect(drive.sinuosity > 100)
   }
 
   // MARK: - Bearing Change Rate

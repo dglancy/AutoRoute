@@ -108,13 +108,14 @@ extension Drive {
   // MARK: - Route Shape
 
   /// Ratio of travelled distance to straight-line start→end distance. 1 = perfectly straight.
-  /// Returns 0 when the straight-line distance is not meaningful (e.g. a round trip).
+  /// The straight-line distance is floored at `Constants.Configuration.minimumLocationAccuracy`
+  /// so loop drives (start ≈ end) yield a large finite value rather than dividing by ~0.
   var sinuosity: Double {
     let positions = orderedPositions
     guard let first = positions.first, let last = positions.last else { return 0 }
     let straightLine = first.location.distance(from: last.location)
-    guard straightLine > 0 else { return 0 }
-    return distanceMetres / straightLine
+    let denominator = max(straightLine, Constants.Configuration.minimumLocationAccuracy)
+    return distanceMetres / denominator
   }
 
   /// Total absolute heading change per kilometre travelled — a proxy for corner frequency.

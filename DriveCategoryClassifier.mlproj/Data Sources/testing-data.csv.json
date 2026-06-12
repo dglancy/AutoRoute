@@ -1,0 +1,22 @@
+{
+  "activityEntities" : [
+
+  ],
+  "createdDate" : "2026-06-12T18:43:34Z",
+  "dataPathRelativeToProjectURL" : "../MLTrainingData/testing-data.csv/",
+  "dataResult" : {
+    "createdDate" : "2026-06-12T18:43:34Z",
+    "dataSourceID" : "570F659F-134E-4497-8FEA-18FA3DEEED1E",
+    "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/testing-data.csv"
+  },
+  "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/testing-data.csv",
+  "experimentIDs" : [
+    "C203C388-B37D-4D94-9506-3E66ECAB5057"
+  ],
+  "id" : "570F659F-134E-4497-8FEA-18FA3DEEED1E",
+  "modifiedDate" : "2026-06-12T18:43:34Z",
+  "pathType" : 0,
+  "preferredFilename" : "testing-data.csv",
+  "title" : "testing-data.csv",
+  "version" : "1.0"
+}

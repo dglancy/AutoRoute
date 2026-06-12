@@ -1,0 +1,41 @@
+{
+  "activityEntities" : [
+    "dataSourceMetrics",
+    [
+      {
+        "createdDate" : "2026-06-12T18:52:47Z",
+        "event" : "dataSourceMetrics",
+        "id" : "BEBDDF8C-C514-49DE-8EBD-0B1BF990B235",
+        "subtitle" : "5 Classes, 100 Items",
+        "title" : "Data Summary"
+      }
+    ],
+    "dataSourceTrainingStarted",
+    [
+      {
+        "createdDate" : "2026-06-12T18:52:47Z",
+        "event" : "dataSourceTrainingStarted",
+        "id" : "0CD626B2-0FBA-4B71-B43B-BFC79C9B2755",
+        "subtitle" : "DriveCategoryClassifier 1",
+        "title" : "Used By"
+      }
+    ]
+  ],
+  "createdDate" : "2026-06-12T18:43:01Z",
+  "dataPathRelativeToProjectURL" : "../MLTrainingData/training-data.csv/",
+  "dataResult" : {
+    "createdDate" : "2026-06-12T18:43:01Z",
+    "dataSourceID" : "CA675425-A40D-4B45-9C69-06E49A56D729",
+    "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/training-data.csv"
+  },
+  "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/training-data.csv",
+  "experimentIDs" : [
+    "C203C388-B37D-4D94-9506-3E66ECAB5057"
+  ],
+  "id" : "CA675425-A40D-4B45-9C69-06E49A56D729",
+  "modifiedDate" : "2026-06-12T18:52:47Z",
+  "pathType" : 0,
+  "preferredFilename" : "training-data.csv",
+  "title" : "training-data.csv",
+  "version" : "1.0"
+}

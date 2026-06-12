@@ -27,6 +27,7 @@ final class DriveTests: SwiftDataBaseTestCase {
     #expect(drive.startPlaceName == nil)
     #expect(drive.endPlaceName == nil)
     #expect(drive.positions == nil || drive.positions!.isEmpty)
+    #expect(drive.category == .none)
   }
 
   @Test
@@ -155,5 +156,79 @@ final class DriveTests: SwiftDataBaseTestCase {
   @Test
   func automaticTriggerDisplayName() {
     #expect(Drive.RecordingTrigger.automatic.displayName == "Automatically")
+  }
+
+  // MARK: - Category.displayName
+
+  @Test
+  func noneCategoryDisplayName() {
+    #expect(Drive.Category.none.displayName == "None")
+  }
+
+  @Test
+  func errandCategoryDisplayName() {
+    #expect(Drive.Category.errand.displayName == "Errand")
+  }
+
+  @Test
+  func urbanCategoryDisplayName() {
+    #expect(Drive.Category.urban.displayName == "Urban")
+  }
+
+  @Test
+  func roadTripCategoryDisplayName() {
+    #expect(Drive.Category.roadTrip.displayName == "Road Trip")
+  }
+
+  @Test
+  func scenicCategoryDisplayName() {
+    #expect(Drive.Category.scenic.displayName == "Scenic")
+  }
+
+  @Test
+  func mixedCategoryDisplayName() {
+    #expect(Drive.Category.mixed.displayName == "Mixed")
+  }
+
+  // MARK: - Category.from(string:)
+
+  @Test
+  func categoryFromStringParsesErrand() {
+    #expect(Drive.Category.from(string: "Errand") == .errand)
+  }
+
+  @Test
+  func categoryFromStringParsesUrban() {
+    #expect(Drive.Category.from(string: "Urban") == .urban)
+  }
+
+  @Test
+  func categoryFromStringParsesRoadTrip() {
+    #expect(Drive.Category.from(string: "Road Trip") == .roadTrip)
+  }
+
+  @Test
+  func categoryFromStringParsesScenic() {
+    #expect(Drive.Category.from(string: "Scenic") == .scenic)
+  }
+
+  @Test
+  func categoryFromStringParsesMixed() {
+    #expect(Drive.Category.from(string: "Mixed") == .mixed)
+  }
+
+  @Test
+  func categoryFromStringIsCaseInsensitiveAndTrimsWhitespace() {
+    #expect(Drive.Category.from(string: "  road trip  ") == .roadTrip)
+  }
+
+  @Test
+  func categoryFromStringFallsBackToNoneForUnrecognizedValue() {
+    #expect(Drive.Category.from(string: "Something Else") == .none)
+  }
+
+  @Test
+  func categoryFromStringFallsBackToNoneForEmptyString() {
+    #expect(Drive.Category.from(string: "") == .none)
   }
 }

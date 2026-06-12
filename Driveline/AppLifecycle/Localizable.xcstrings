@@ -855,6 +855,9 @@
         }
       }
     },
+    "Category" : {
+      "comment" : "Metadata row"
+    },
     "Clear text" : {
       "comment" : "Accessibility label for button that clears a text field",
       "localizations" : {
@@ -1557,6 +1560,9 @@
         }
       }
     },
+    "Errand" : {
+      "comment" : "Drive category: short, practical drive"
+    },
     "Evening" : {
       "comment" : "Time-of-day word in drive name",
       "localizations" : {
@@ -2231,6 +2237,9 @@
         }
       }
     },
+    "Mixed" : {
+      "comment" : "Drive category: a mix of driving types"
+    },
     "More options" : {
       "comment" : "Accessibility label for the more options button on the drive detail screen\nEllipsis menu accessibility label",
       "localizations" : {
@@ -2406,6 +2415,9 @@
         }
       }
     },
+    "None" : {
+      "comment" : "Drive category: not categorized"
+    },
     "OK" : {
       "comment" : "Dismiss start drive error alert",
       "localizations" : {
@@ -2550,6 +2562,9 @@
         }
       }
     },
+    "Road Trip" : {
+      "comment" : "Drive category: long-distance journey"
+    },
     "Running in the background to save battery. Your full drive map appears here when the drive ends." : {
       "comment" : "Battery saving note shown on the recording screen while a drive is in progress",
       "localizations" : {
@@ -2607,6 +2622,9 @@
           }
         }
       }
+    },
+    "Scenic" : {
+      "comment" : "Drive category: scenic or leisure drive"
     },
     "Search" : {
       "comment" : "A label for a search bar.",
@@ -3574,6 +3592,9 @@
           }
         }
       }
+    },
+    "Urban" : {
+      "comment" : "Drive category: city or town driving"
     },
     "Weather data provided by Apple Weather" : {
       "comment" : "Weather attribution footer link",

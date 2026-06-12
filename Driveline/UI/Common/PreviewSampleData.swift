@@ -24,6 +24,7 @@ enum PreviewSampleData {
     drive.status = .finished
     drive.startPlaceName = "Home · Sunnyvale"
     drive.endPlaceName = "South Lake Tahoe"
+    drive.category = .roadTrip
     context.insert(drive)
 
     let waypoints: [(Double, Double, Double)] = [
@@ -52,21 +53,22 @@ enum PreviewSampleData {
     let home: Coords = (51.440, -0.102)
 
     let samples: [(name: String, daysAgo: Int, hour: Int, minute: Int, duration: TimeInterval?,
-                   place: String?, end: Coords?)] = [
-      ("Morning Commute", 0, 8, 12, 1_740, "Home", (51.514, -0.093)),
-      ("School Run", 0, 15, 30, nil, nil, nil),
-      ("Evening Errand", 1, 18, 45, 1_200, "Tesco Extra", (51.452, -0.091)),
-      ("Lunch Drive", 3, 12, 20, 2_100, nil, (51.459, -0.119)),
-      ("School Run", 3, 8, 10, 840, "School", (51.549, -0.122)),
-      ("My happy long weekend to Tahoe in California", 6, 10, 0, 14_400, "Brighton", (50.820, -0.142)),
-      ("City Centre Visit", 32, 11, 30, 2_700, "Manchester", (53.480, -2.244)),
-      ("Mountain Drive", 68, 9, 0, 10_800, "Snowdonia", (53.120, -4.131))
+                   place: String?, end: Coords?, category: Drive.Category)] = [
+      ("Morning Commute", 0, 8, 12, 1_740, "Home", (51.514, -0.093), .urban),
+      ("School Run", 0, 15, 30, nil, nil, nil, .errand),
+      ("Evening Errand", 1, 18, 45, 1_200, "Tesco Extra", (51.452, -0.091), .errand),
+      ("Lunch Drive", 3, 12, 20, 2_100, nil, (51.459, -0.119), .mixed),
+      ("School Run", 3, 8, 10, 840, "School", (51.549, -0.122), .errand),
+      ("My happy long weekend to Tahoe in California", 6, 10, 0, 14_400, "Brighton", (50.820, -0.142), .roadTrip),
+      ("City Centre Visit", 32, 11, 30, 2_700, "Manchester", (53.480, -2.244), .urban),
+      ("Mountain Drive", 68, 9, 0, 10_800, "Snowdonia", (53.120, -4.131), .scenic)
     ]
 
-    for (name, daysAgo, hour, minute, duration, place, end) in samples {
+    for (name, daysAgo, hour, minute, duration, place, end, category) in samples {
       let drive = Drive(name: name)
       drive.startedAt = date(daysAgo: daysAgo, hour: hour, minute: minute)
       drive.startPlaceName = place
+      drive.category = category
       if let duration {
         drive.endedAt = drive.startedAt.addingTimeInterval(duration)
         drive.status = .finished

@@ -27,6 +27,7 @@ enum Icons {
     static let speed = "gauge"
     static let location = "location"
     static let gpsSignal = "dot.radiowaves.left.and.right"
+    static let category = "tag"
   }
 
   enum Navigation {

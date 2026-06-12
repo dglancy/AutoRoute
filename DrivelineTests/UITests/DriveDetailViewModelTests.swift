@@ -107,6 +107,28 @@ struct DriveDetailViewModelTests {
   }
 
   @Test
+  func hasCategoryIsFalseWhenCategoryIsNone() {
+    let vm = buildViewModel(drive: makeDrive())
+    #expect(vm.hasCategory == false)
+  }
+
+  @Test
+  func hasCategoryIsTrueWhenCategoryIsSet() {
+    let drive = makeDrive()
+    drive.category = .scenic
+    let vm = buildViewModel(drive: drive)
+    #expect(vm.hasCategory == true)
+  }
+
+  @Test
+  func categoryDisplayNameMatchesDriveCategory() {
+    let drive = makeDrive()
+    drive.category = .roadTrip
+    let vm = buildViewModel(drive: drive)
+    #expect(vm.categoryDisplayName == Drive.Category.roadTrip.displayName)
+  }
+
+  @Test
   func topSpeedMatchesLocalizedSpeedString() {
     let drive = driveWithOnePosition()
     let vm = buildViewModel(drive: drive)

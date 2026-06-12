@@ -50,6 +50,9 @@ final class DriveDetailViewModel {
   var departureTime: String { drive.startedAt.clockString() }
   var arrivalTime: String? { drive.endedAt?.clockString() }
 
+  var hasCategory: Bool { drive.category != .none }
+  var categoryDisplayName: String { drive.category.displayName }
+
   var topSpeed: String { Measurement(value: drive.maxSpeedMetresPerSecond, unit: UnitSpeed.metersPerSecond).localizedSpeedString() }
   var trackPoints: String { (drive.positions?.count ?? 0).formatted() }
   var triggerDisplayName: String { drive.trigger.displayName }

@@ -213,6 +213,17 @@ struct DriveDetailView: View {
 
   private var metadataCard: some View {
     VStack(spacing: 0) {
+      if viewModel.hasCategory {
+        IconRow(title: String(localized: "Category", comment: "Metadata row"), trailing: viewModel.categoryDisplayName) {
+          Image(systemName: Icons.Stats.category)
+            .font(.callout)
+            .foregroundStyle(.secondary)
+            .dynamicTypeSize(.xSmall ... .accessibility1)
+        }
+
+        Divider().padding(.leading, 52)
+      }
+
       IconRow(title: String(localized: "Top Speed", comment: "Metadata row"), trailing: viewModel.topSpeed) {
         Image(systemName: Icons.Stats.speed)
           .font(.callout)

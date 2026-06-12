@@ -35,6 +35,47 @@ final class Drive {
     }
   }
 
+  enum Category: String, Codable {
+    case none
+    case errand
+    case urban
+    case roadTrip
+    case scenic
+    case mixed
+
+    // MARK: - Computed properties
+
+    var displayName: String {
+      switch self {
+      case .none:
+        String(localized: "None", comment: "Drive category: not categorized")
+      case .errand:
+        String(localized: "Errand", comment: "Drive category: short, practical drive")
+      case .urban:
+        String(localized: "Urban", comment: "Drive category: city or town driving")
+      case .roadTrip:
+        String(localized: "Road Trip", comment: "Drive category: long-distance journey")
+      case .scenic:
+        String(localized: "Scenic", comment: "Drive category: scenic or leisure drive")
+      case .mixed:
+        String(localized: "Mixed", comment: "Drive category: a mix of driving types")
+      }
+    }
+
+    // MARK: - Parsing
+
+    static func from(string: String) -> Category {
+      switch string.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
+      case "errand": .errand
+      case "urban": .urban
+      case "road trip": .roadTrip
+      case "scenic": .scenic
+      case "mixed": .mixed
+      default: .none
+      }
+    }
+  }
+
   // MARK: - Properties
 
   var id: UUID = UUID()
@@ -47,6 +88,7 @@ final class Drive {
 
   var trigger: RecordingTrigger = RecordingTrigger.manual
   var status: DriveStatus = DriveStatus.recording
+  var category: Category = Category.none
 
   @Relationship(deleteRule: .cascade, inverse: \Position.drive)
   var positions: [Position]?
@@ -92,6 +134,7 @@ final class Drive {
     self.endPlaceName = nil
     self.trigger = trigger
     self.status = .recording
+    self.category = .none
     self.positions = nil
     self.accumulatedDistanceMetres = 0
     self.weatherReadings = nil

@@ -8,6 +8,20 @@
         "id" : "BEBDDF8C-C514-49DE-8EBD-0B1BF990B235",
         "subtitle" : "5 Classes, 100 Items",
         "title" : "Data Summary"
+      },
+      {
+        "createdDate" : "2026-06-12T19:37:04Z",
+        "event" : "dataSourceMetrics",
+        "id" : "298B2377-D3D7-4757-91EE-9225BE4F1F51",
+        "subtitle" : "5 Classes, 100 Items",
+        "title" : "Data Summary"
+      },
+      {
+        "createdDate" : "2026-06-12T19:40:26Z",
+        "event" : "dataSourceMetrics",
+        "id" : "63FD2A65-E79A-491E-83DD-7DC6897C3788",
+        "subtitle" : "5 Classes, 100 Items",
+        "title" : "Data Summary"
       }
     ],
     "dataSourceTrainingStarted",
@@ -17,6 +31,20 @@
         "event" : "dataSourceTrainingStarted",
         "id" : "0CD626B2-0FBA-4B71-B43B-BFC79C9B2755",
         "subtitle" : "DriveCategoryClassifier 1",
+        "title" : "Used By"
+      },
+      {
+        "createdDate" : "2026-06-12T19:37:04Z",
+        "event" : "dataSourceTrainingStarted",
+        "id" : "0C898652-631E-4BFE-9C79-B328B44F5402",
+        "subtitle" : "DriveCategoryClassifier 2",
+        "title" : "Used By"
+      },
+      {
+        "createdDate" : "2026-06-12T19:40:26Z",
+        "event" : "dataSourceTrainingStarted",
+        "id" : "CD540A87-CF33-443F-9CF6-B6FB17B65710",
+        "subtitle" : "DriveCategoryClassifier 3",
         "title" : "Used By"
       }
     ]
@@ -119,10 +147,12 @@
   },
   "dataURL" : "file:///Users/damien/Development/Driveline/MLTrainingData/training-data.csv",
   "experimentIDs" : [
-    "C203C388-B37D-4D94-9506-3E66ECAB5057"
+    "C203C388-B37D-4D94-9506-3E66ECAB5057",
+    "AC26A64F-899D-486B-B806-3ED2BAF29D71",
+    "10F90ABA-4C41-48D7-87B9-CFB0C512A3BC"
   ],
   "id" : "CA675425-A40D-4B45-9C69-06E49A56D729",
-  "modifiedDate" : "2026-06-12T19:09:59Z",
+  "modifiedDate" : "2026-06-12T19:40:26Z",
   "pathType" : 0,
   "preferredFilename" : "training-data.csv",
   "title" : "training-data.csv",

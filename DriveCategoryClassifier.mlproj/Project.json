@@ -1,0 +1,29 @@
+{
+  "activityEntities" : [
+    "projectCreated",
+    [
+      {
+        "createdDate" : "2026-06-12T18:29:13Z",
+        "event" : "projectCreated",
+        "id" : "39E89136-F050-467C-B76D-B1C184810195",
+        "subtitle" : "DriveCategoryClassifier",
+        "title" : "Project Created"
+      }
+    ]
+  ],
+  "authorName" : "Damien Glancy",
+  "createdDate" : "2026-06-12T18:29:13Z",
+  "description" : "A machine learning classifier that predicts a drive's category — none, errand, urban, roadTrip, scenic, or mixed — based on trip characteristics such as distance, duration, time of day, sinuosity, and stop patterns.",
+  "id" : "0A547C48-507D-44A1-8167-B912F47ECA8E",
+  "license" : "MIT License",
+  "location" : "",
+  "modifiedDate" : "2026-06-12T18:29:13Z",
+  "projectName" : "DriveCategoryClassifier",
+  "settingsEntity" : {
+    "snapshotOnExtendTraining" : true,
+    "snapshotOnResumeTraining" : false
+  },
+  "taskType" : "generalClassifier",
+  "title" : "Tabular Classification",
+  "version" : "1.1"
+}

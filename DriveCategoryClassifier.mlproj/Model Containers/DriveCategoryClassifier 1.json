@@ -1,0 +1,130 @@
+{
+  "activityEntities" : [
+    "experimentCreated",
+    [
+      {
+        "createdDate" : "2026-06-12T18:29:13Z",
+        "event" : "experimentCreated",
+        "id" : "0B6AD9DB-2D0E-45CB-9D12-B81C26C7B100",
+        "subtitle" : "DriveCategoryClassifier 1",
+        "title" : "Model Source Created"
+      }
+    ]
+  ],
+  "contentDataResult" : {
+
+  },
+  "createdDate" : "2026-06-12T18:29:13Z",
+  "evaluationContainerEntity" : {
+    "createdDate" : "2026-06-12T18:29:13Z",
+    "evaluationEntities" : [
+
+    ],
+    "id" : "b5306919-dcdd-4751-a641-1b1c212b9c17",
+    "modifiedDate" : "2026-06-12T18:29:13Z",
+    "previewType" : "tabularClassifier",
+    "testingEvaluationEntity" : {
+      "analysedDataType" : "none",
+      "createdDate" : "2026-06-12T18:29:13Z",
+      "dataResult" : {
+
+      },
+      "id" : "2314912f-2195-4645-8317-2bf37a07cba8"
+    },
+    "trainingEvaluationEntity" : {
+      "analysedDataType" : "none",
+      "createdDate" : "2026-06-12T18:29:13Z",
+      "dataResult" : {
+
+      },
+      "id" : "5defdc66-2964-4238-b356-ea093461c0b9"
+    },
+    "validationEvaluationEntity" : {
+      "analysedDataType" : "none",
+      "createdDate" : "2026-06-12T18:29:13Z",
+      "dataResult" : {
+
+      },
+      "id" : "27180a7f-32f3-4cd0-b4c3-61261d892c24"
+    }
+  },
+  "evaluationEntity" : {
+    "analysedDataType" : "none",
+    "dataResult" : {
+
+    },
+    "id" : "0252464c-51b8-4eed-aaf9-df57d446fc3f"
+  },
+  "evaluationState" : "uninitialized",
+  "id" : "C203C388-B37D-4D94-9506-3E66ECAB5057",
+  "modelEntity" : {
+    "createdDate" : "2026-06-12T18:29:13Z",
+    "experimentID" : "C203C388-B37D-4D94-9506-3E66ECAB5057",
+    "id" : "D06A2850-957D-49D8-A19B-07AA181F6035",
+    "modifiedDate" : "2026-06-12T18:29:13Z",
+    "title" : "",
+    "version" : "1.0"
+  },
+  "modifiedDate" : "2026-06-12T18:29:13Z",
+  "preferredFilename" : "DriveCategoryClassifier 1",
+  "settingEntity" : {
+    "algorithmType" : "maxEnt",
+    "augmentations" : [
+
+    ],
+    "featureNames" : [
+
+    ],
+    "generalClassifierType" : {
+      "auto" : {
+
+      }
+    },
+    "handActionClassifierAugmentations" : [
+
+    ],
+    "handPoseClassifierAugmentations" : [
+
+    ],
+    "harVideoAugmentations" : 0,
+    "seedType" : "default",
+    "styleTransferAlgorithmType" : "image",
+    "taskType" : "generalClassifier",
+    "transferLearningEmbeddingType" : "dynamic"
+  },
+  "snapshotRole" : {
+    "withoutSnapshots" : 0
+  },
+  "state" : "uninitialized",
+  "title" : "DriveCategoryClassifier 1",
+  "trainingEntity" : {
+    "analysedDataType" : "choose",
+    "checkpointMetrics" : {
+
+    },
+    "dataResult" : {
+
+    },
+    "featureExtractionCheckpointMayBeAvailable" : false,
+    "progress" : [
+
+    ],
+    "snapshottableCheckpoints" : {
+
+    }
+  },
+  "validationEntity" : {
+    "analysedDataType" : "auto",
+    "dataResult" : {
+
+    },
+    "splitOptions" : {
+      "strategy" : {
+        "automatic" : {
+
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

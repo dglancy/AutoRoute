@@ -157,7 +157,9 @@ struct HomeView: View {
 
     if !viewModel.isSelectMode {
       overflowMenuItem
-      recordButtonItem
+      if !driveService.isRecording {
+        recordButtonItem
+      }
     }
   }
 

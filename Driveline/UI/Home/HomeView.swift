@@ -39,6 +39,7 @@ struct HomeView: View {
         .navigationTitle("Drives")
         .searchable(text: $viewModel.searchText, prompt: "Search")
         .searchDictationBehavior(.inline(activation: .onSelect))
+        .searchToolbarBehavior(.minimize)
         .toolbar { toolbarItems }
         .onChange(of: drives, initial: true) { _, newDrives in
           viewModel.update(with: newDrives)
@@ -157,8 +158,6 @@ struct HomeView: View {
 
     if !viewModel.isSelectMode {
       overflowMenuItem
-      DefaultToolbarItem(kind: .search, placement: .bottomBar)
-      ToolbarSpacer(.fixed, placement: .bottomBar)
       recordButtonItem
     }
   }

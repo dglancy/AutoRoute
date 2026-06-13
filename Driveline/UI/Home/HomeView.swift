@@ -54,7 +54,6 @@ struct HomeView: View {
       guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String else { return }
       viewModel.openDrive(fromSpotlightIdentifier: identifier)
     }
-    .modifier(RecordingScreenModifier(driveService: driveService))
     .modifier(DeleteDrivesAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingDeleteConfirmation))
     .modifier(StartDriveErrorAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingStartDriveError))
     .modifier(MergeDrivesSheetModifier(viewModel: viewModel, isPresented: $viewModel.showingMergeSheet))
@@ -219,22 +218,6 @@ struct HomeView: View {
 }
 
 // MARK: - Presentation Modifiers
-
-private struct RecordingScreenModifier: ViewModifier {
-  let driveService: DriveRecordingService
-
-  func body(content: Content) -> some View {
-    content.fullScreenCover(isPresented: Binding(
-      get: { driveService.isRecording },
-      set: { _ in }
-    )) {
-      NavigationStack {
-        RecordingView(driveService: driveService)
-          .toolbarVisibility(.hidden, for: .navigationBar)
-      }
-    }
-  }
-}
 
 private struct DeleteDrivesAlertModifier: ViewModifier {
   let viewModel: HomeViewModel

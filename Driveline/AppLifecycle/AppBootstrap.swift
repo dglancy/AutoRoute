@@ -60,8 +60,7 @@ enum AppBootstrap {
   // MARK: - Private
 
   private static func isUITesting() -> Bool {
-//    ProcessInfo.processInfo.arguments.contains(Constants.Testing.UITestingFlag)
-    return true
+    ProcessInfo.processInfo.arguments.contains(Constants.Testing.UITestingFlag)
   }
 
   private static func createModelContainer(inMemoryOnly: Bool) -> ModelContainer {

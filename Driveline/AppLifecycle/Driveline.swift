@@ -46,9 +46,17 @@ struct Driveline: App {
 
   var body: some Scene {
     WindowGroup {
-      HomeView(spotlightIndexingService: spotlightIndexingService, modelContext: modelContainer.mainContext)
-        .environment(driveService)
-        .onChange(of: scenePhase) {
+      ZStack {
+        HomeView(spotlightIndexingService: spotlightIndexingService, modelContext: modelContainer.mainContext)
+        if driveService.isRecording {
+          RecordingView(driveService: driveService)
+            .ignoresSafeArea()
+            .transition(.move(edge: .bottom))
+        }
+      }
+      .animation(.easeInOut(duration: 0.35), value: driveService.isRecording)
+      .environment(driveService)
+      .onChange(of: scenePhase) {
           switch scenePhase {
           case .active:
             sweepServices.forEach { service in Task { await service.sweep() } }

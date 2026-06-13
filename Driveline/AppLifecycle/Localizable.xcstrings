@@ -950,6 +950,7 @@
     },
     "Currently recording — open recording screen" : {
       "comment" : "Record button when recording",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2216,6 +2217,7 @@
     },
     "Minimize recording screen" : {
       "comment" : "Dismiss button accessibility label",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2512,6 +2514,7 @@
       }
     },
     "Recording drive…" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3310,6 +3313,7 @@
       }
     },
     "Tap to view" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

@@ -46,20 +46,14 @@ struct HomeView: View {
         .onChange(of: driveService.isRecording) { _, isRecording in
           if isRecording {
             viewModel.exitSelectMode()
-          } else {
-            viewModel.update(with: drives)
           }
-          viewModel.showingRecordingScreen = isRecording
-        }
-        .onAppear {
-          viewModel.showingRecordingScreen = driveService.isRecording
         }
     }
     .onContinueUserActivity(CSSearchableItemActionType) { activity in
       guard let identifier = activity.userInfo?[CSSearchableItemActivityIdentifier] as? String else { return }
       viewModel.openDrive(fromSpotlightIdentifier: identifier)
     }
-    .modifier(RecordingScreenModifier(driveService: driveService, isPresented: $viewModel.showingRecordingScreen))
+    .modifier(RecordingScreenModifier(driveService: driveService))
     .modifier(DeleteDrivesAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingDeleteConfirmation))
     .modifier(StartDriveErrorAlertModifier(viewModel: viewModel, isPresented: $viewModel.showingStartDriveError))
     .modifier(MergeDrivesSheetModifier(viewModel: viewModel, isPresented: $viewModel.showingMergeSheet))
@@ -69,7 +63,7 @@ struct HomeView: View {
 
   @ViewBuilder
   private var content: some View {
-    if viewModel.sections.isEmpty && !driveService.isRecording {
+    if viewModel.sections.isEmpty {
       if !viewModel.isSearchActive {
         emptyState
       } else {
@@ -91,12 +85,6 @@ struct HomeView: View {
   private var driveList: some View {
     ZStack(alignment: .bottom) {
       List {
-        if driveService.isRecording {
-          RecordingBannerSection {
-            viewModel.showingRecordingScreen = true
-          }
-        }
-
         if viewModel.recentStats.driveCount > 0 && !viewModel.isSelectMode && !viewModel.isSearchActive {
           Section {
             HomeStatsPanelView(
@@ -126,9 +114,7 @@ struct HomeView: View {
               } else {
                 NavigationLink(value: row.drive) {
                   DriveRowView(drive: row.drive, display: row.display)
-                    .opacity(driveService.isRecording ? 0.4 : 1)
                 }
-                .disabled(driveService.isRecording)
               }
             }
             .onDelete(perform: viewModel.isSelectMode ? nil : { indexSet in
@@ -196,7 +182,7 @@ struct HomeView: View {
         ) {
           viewModel.enterSelectMode()
         }
-        .disabled(driveService.isRecording || viewModel.sections.isEmpty)
+        .disabled(viewModel.sections.isEmpty)
 
         Button(
           String(localized: "Settings", comment: "Menu item to open settings"),
@@ -217,32 +203,18 @@ struct HomeView: View {
   private var recordButtonItem: some ToolbarContent {
     ToolbarItem(placement: .bottomBar) {
       Button {
-        if driveService.isRecording {
-          viewModel.showingRecordingScreen = true
-        } else {
-          viewModel.startDrive(using: driveService)
-        }
+        viewModel.startDrive(using: driveService)
       } label: {
         ZStack {
           Circle().fill(Color(.systemFill))
-          if driveService.isRecording {
-            RoundedRectangle(cornerRadius: 3)
-              .fill(.primary)
-              .frame(width: 11, height: 11)
-          } else {
-            Image(systemName: Icons.Selection.record)
-              .font(.title2)
-              .foregroundStyle(.primary)
-          }
+          Image(systemName: Icons.Selection.record)
+            .font(.title2)
+            .foregroundStyle(.red)
         }
         .frame(width: 36, height: 36)
       }
       .buttonStyle(.plain)
-      .accessibilityLabel(
-        driveService.isRecording
-        ? String(localized: "Currently recording — open recording screen", comment: "Record button when recording")
-        : String(localized: "Start a new drive", comment: "Record button when idle")
-      )
+      .accessibilityLabel(String(localized: "Start a new drive", comment: "Record button when idle"))
     }
   }
 }
@@ -251,10 +223,12 @@ struct HomeView: View {
 
 private struct RecordingScreenModifier: ViewModifier {
   let driveService: DriveRecordingService
-  var isPresented: Binding<Bool>
 
   func body(content: Content) -> some View {
-    content.fullScreenCover(isPresented: isPresented) {
+    content.fullScreenCover(isPresented: Binding(
+      get: { driveService.isRecording },
+      set: { _ in }
+    )) {
       RecordingView(driveService: driveService)
     }
   }

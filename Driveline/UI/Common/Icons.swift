@@ -31,8 +31,6 @@ enum Icons {
   }
 
   enum Navigation {
-    static let chevronDown = "chevron.down"
-    static let chevronRight = "chevron.right"
     static let chevronLeft = "chevron.left"
   }
 

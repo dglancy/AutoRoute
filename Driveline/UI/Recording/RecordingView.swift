@@ -13,7 +13,6 @@ struct RecordingView: View {
   // MARK: - Properties
 
   @State private var viewModel: RecordingViewModel
-  @Environment(\.dismiss) private var dismiss
 
   // MARK: - Lifecycle
 
@@ -48,24 +47,9 @@ struct RecordingView: View {
 
   private var header: some View {
     HStack {
-      Button { dismiss() } label: {
-        ZStack {
-          Circle().fill(Color(.systemFill))
-          Image(systemName: Icons.Navigation.chevronDown)
-            .font(.body.weight(.semibold))
-            .foregroundStyle(Color(.secondaryLabel))
-            .dynamicTypeSize(.large ... .xxxLarge)
-        }
-        .frame(width: 36, height: 36)
-      }
-      .buttonStyle(.plain)
-      .accessibilityLabel(String(localized: "Minimize recording screen", comment: "Dismiss button accessibility label"))
-
       Spacer()
       recordingBadge
       Spacer()
-
-      Color.clear.frame(width: 36, height: 36)
     }
     .padding(.horizontal, 14)
     .padding(.top, 16)

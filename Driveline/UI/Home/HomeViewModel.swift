@@ -62,7 +62,6 @@ final class HomeViewModel {
 
   var showingDeleteConfirmation: Bool = false
   var showingStartDriveError: Bool = false
-  var showingRecordingScreen: Bool = false
   var showingMergeSheet: Bool = false
 
   // MARK: - Lifecycle

@@ -16,5 +16,7 @@ struct AppEnvironment {
   let driveService: DriveRecordingService
   let placeNameSweepService: PlaceNameSweepService
   let weatherSweepService: WeatherSweepService
+  // TODO: Remove once the DriveCategoryClassifier model is finalized.
+  let debugCategoryPredictionSweepService: DebugCategoryPredictionSweepService
   let spotlightIndexingService: SpotlightIndexingService
 }

@@ -28,6 +28,12 @@ enum AppBootstrap {
     let spotlightIndexingService = SpotlightIndexingService()
     let placeNameSweepService = PlaceNameSweepService(modelContext: modelContainer.mainContext, spotlightIndexingService: spotlightIndexingService)
     let weatherSweepService = WeatherSweepService(modelContext: modelContainer.mainContext)
+    // TODO: Remove debugCategoryPredictionSweepService once the ML model is finalized.
+    let driveClassifierService = DriveClassifierService(modelContext: modelContainer.mainContext)
+    let debugCategoryPredictionSweepService = DebugCategoryPredictionSweepService(
+      modelContext: modelContainer.mainContext,
+      classifierService: driveClassifierService
+    )
     let activeDrive = findActiveDrive(in: modelContainer.mainContext)
     let driveService = DriveRecordingService(
       modelContext: modelContainer.mainContext,
@@ -39,13 +45,13 @@ enum AppBootstrap {
       initialDrive: activeDrive
     )
     
-    registerBGTasks([placeNameSweepService, weatherSweepService])
+    registerBGTasks([placeNameSweepService, weatherSweepService, debugCategoryPredictionSweepService])
     registerIntentDependencies(driveService: driveService)
-    
+
     if isUITesting { Log.lifecycle.info("Running in UI Testing mode") }
-    
+
     Log.lifecycle.info("App started")
-    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, spotlightIndexingService: spotlightIndexingService)
+    return AppEnvironment(modelContainer: modelContainer, driveService: driveService, placeNameSweepService: placeNameSweepService, weatherSweepService: weatherSweepService, debugCategoryPredictionSweepService: debugCategoryPredictionSweepService, spotlightIndexingService: spotlightIndexingService)
   }
 
   // MARK: - Private

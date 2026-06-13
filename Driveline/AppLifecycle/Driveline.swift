@@ -17,13 +17,15 @@ struct Driveline: App {
   @State private var driveService: DriveRecordingService
   @State private var placeNameSweepService: PlaceNameSweepService
   @State private var weatherSweepService: WeatherSweepService
+  // TODO: Remove once the DriveCategoryClassifier model is finalized.
+  @State private var debugCategoryPredictionSweepService: DebugCategoryPredictionSweepService
   @State private var spotlightIndexingService: SpotlightIndexingService
   @Environment(\.scenePhase) private var scenePhase
 
   private let modelContainer: ModelContainer
 
   private var sweepServices: [any SweepServiceProtocol] {
-    [placeNameSweepService, weatherSweepService]
+    [placeNameSweepService, weatherSweepService, debugCategoryPredictionSweepService]
   }
 
   // MARK: - Lifecycle
@@ -34,6 +36,7 @@ struct Driveline: App {
     _driveService = State(initialValue: env.driveService)
     _placeNameSweepService = State(initialValue: env.placeNameSweepService)
     _weatherSweepService = State(initialValue: env.weatherSweepService)
+    _debugCategoryPredictionSweepService = State(initialValue: env.debugCategoryPredictionSweepService)
     _spotlightIndexingService = State(initialValue: env.spotlightIndexingService)
   }
 
@@ -43,10 +46,10 @@ struct Driveline: App {
     WindowGroup {
       HomeView(spotlightIndexingService: spotlightIndexingService, modelContext: modelContainer.mainContext)
         .environment(driveService)
-        .onChange(of: scenePhase) { _, newPhase in
-          switch newPhase {
+        .onChange(of: scenePhase) {
+          switch scenePhase {
           case .active:
-            for service in sweepServices { Task { await service.sweep() } }
+            sweepServices.forEach { service in Task { await service.sweep() } }
           case .background:
             sweepServices.forEach { scheduleSweepTask(for: $0) }
           default:

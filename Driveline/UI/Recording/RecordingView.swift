@@ -63,6 +63,7 @@ struct RecordingView: View {
         .foregroundStyle(Color.red)
         .tracking(1.4)
         .accessibilityLabel(String(localized: "Recording in progress", comment: "Status badge accessibility label"))
+        .accessibilityIdentifier("RecordingBanner")
         .dynamicTypeSize(.large ... .xxxLarge)
     }
     .padding(.vertical, 7)
@@ -80,6 +81,7 @@ struct RecordingView: View {
         .textCase(.uppercase)
         .padding(.bottom, 6)
         .accessibilityHidden(true)
+        .accessibilityIdentifier("Elapsed")
         .dynamicTypeSize(.large ... .accessibility2)
 
       Text(viewModel.elapsedDisplay)
@@ -89,6 +91,7 @@ struct RecordingView: View {
         .dynamicTypeSize(.large ... .accessibility3)
         .foregroundStyle(Color(.label))
         .accessibilityLabel(String(localized: "Elapsed time", comment: "Timer accessibility label"))
+        .accessibilityIdentifier("ElapsedTime")
         .accessibilityValue(viewModel.elapsedSpeechValue)
 
       VStack(spacing: -6) {
@@ -96,9 +99,11 @@ struct RecordingView: View {
           .font(.largeTitle.weight(.semibold))
           .monospacedDigit()
           .foregroundStyle(.primary)
+          .accessibilityIdentifier("DistanceValue")
         Text(viewModel.distanceUnit)
           .font(.title2.weight(.medium))
           .foregroundStyle(Color(.secondaryLabel))
+          .accessibilityIdentifier("DistanceUnit")
           .dynamicTypeSize(.large ... .accessibility3)
       }
       .padding(.top, 22)
@@ -112,9 +117,13 @@ struct RecordingView: View {
     HStack(spacing: 0) {
       StatColumn(value: viewModel.formattedPositionCount,
                  label: String(localized: "logged",
-                               comment: "Label for the count of GPS positions logged during a drive"))
+                               comment: "Label for the count of GPS positions logged during a drive"),
+                 valueAccessibilityIdentifier: "PositionsCountValue",
+                 labelAccessibilityIdentifier: "PositionCountLabel")
       Divider().frame(height: 36)
-      StatColumn(value: viewModel.startedAt, label: String(localized: "started", comment: "Label for the time the drive started"))
+      StatColumn(value: viewModel.startedAt, label: String(localized: "started", comment: "Label for the time the drive started"),
+                 valueAccessibilityIdentifier: "DriveStartedAtValue",
+                 labelAccessibilityIdentifier: "DriveStartedAtLabel")
     }
     .frame(width: 280)
   }
@@ -128,6 +137,7 @@ struct RecordingView: View {
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .lineSpacing(4)
+        .accessibilityIdentifier("BatteryExplanation")
         .dynamicTypeSize(.xSmall ... .xxLarge)
         .fixedSize(horizontal: false, vertical: true)
     }
@@ -143,6 +153,8 @@ struct RecordingView: View {
     RecordingControlButton(
       iconName: Icons.Recording.stop,
       label: String(localized: "Finish Drive", comment: "Finish drive button label"),
+      labelAccessibilityIdentifier: "FinishDrive",
+      buttonAccessibilityIdentifier: "FinishDriveButton",
       background: .red,
       iconColor: .white,
       action: viewModel.finishDrive
@@ -167,6 +179,8 @@ private struct RecordingControlButton: View {
 
   let iconName: String
   let label: String
+  let labelAccessibilityIdentifier: String
+  let buttonAccessibilityIdentifier: String
   let background: Background
   let iconColor: Color
   let action: () -> Void
@@ -195,12 +209,14 @@ private struct RecordingControlButton: View {
       }
       .buttonStyle(.plain)
       .accessibilityLabel(label)
+      .accessibilityIdentifier(buttonAccessibilityIdentifier)
       .dynamicTypeSize(.large ... .xxxLarge)
       
       Text(label)
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .accessibilityHidden(true)
+        .accessibilityIdentifier(labelAccessibilityIdentifier)
         .dynamicTypeSize(.large ... .accessibility2)
     }
   }
@@ -213,6 +229,8 @@ private struct StatColumn: View {
 
   let value: String
   let label: String
+  let valueAccessibilityIdentifier: String
+  let labelAccessibilityIdentifier: String
 
   // MARK: - Body
 
@@ -222,10 +240,12 @@ private struct StatColumn: View {
         .font(.title3.weight(.semibold))
         .monospacedDigit()
         .foregroundStyle(Color(.label))
+        .accessibilityIdentifier(valueAccessibilityIdentifier)
         .dynamicTypeSize(.large ... .xLarge)
       Text(label)
         .font(.caption)
         .foregroundStyle(Color(.secondaryLabel))
+        .accessibilityIdentifier(labelAccessibilityIdentifier)
         .dynamicTypeSize(.large ... .xxxLarge)
     }
     .frame(maxWidth: .infinity)

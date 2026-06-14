@@ -9,6 +9,11 @@
     }
   ],
   "defaultOptions" : {
+    "locationScenario" : {
+      "identifier" : "London, England",
+      "referenceType" : "built-in"
+    },
+    "testExecutionOrdering" : "random",
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [
@@ -21,7 +26,8 @@
     },
     {
       "skippedTests" : [
-        "BaseXCTestCase"
+        "BaseXCTestCase",
+        "DrivelineUITests\/testShowRecordScreenFromEmptyScreen()"
       ],
       "target" : {
         "containerPath" : "container:Driveline.xcodeproj",

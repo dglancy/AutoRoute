@@ -21,6 +21,15 @@ class BaseXCTestCase: XCTestCase {
     continueAfterFailure = false
     app = XCUIApplication()
     app.launchArguments += ["-ui-testing"]
+
+    addUIInterruptionMonitor(withDescription: "System permission alert") { alert in
+      for label in ["Allow While Using App", "Allow Once", "Allow"] where alert.buttons[label].exists {
+        alert.buttons[label].tap()
+        return true
+      }
+      return false
+    }
+
     app.launch()
   }
 
@@ -32,6 +41,16 @@ class BaseXCTestCase: XCTestCase {
   // MARK: - Helper functions
   
   func navigatePastEmptyState() {
-    app.buttons["Start a new drive"].tap()
+    app.buttons["NewDriveButton"].tap()
+
+    // Starting a drive may trigger a location permission alert; tapping the
+    // app flushes the interruption monitor registered in setUp() so it can
+    // dismiss the alert before we assert on the recording screen.
+    app.tap()
+  }
+  
+  func navigateToHomeScreen() {
+    navigatePastEmptyState()
+    app.buttons["FinishDriveButton"].tap()
   }
 }

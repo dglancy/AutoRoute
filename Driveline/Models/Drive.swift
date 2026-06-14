@@ -80,7 +80,7 @@ final class Drive {
 
   var id: UUID = UUID()
   var name: String?
-  var startedAt: Date = Date()
+  var startedAt: Date = Date.now
   var endedAt: Date?
 
   var startPlaceName: String?
@@ -128,7 +128,6 @@ final class Drive {
   init(name: String? = nil, trigger: RecordingTrigger = .manual) {
     self.id = UUID()
     self.name = name
-    self.startedAt = .now
     self.endedAt = nil
     self.startPlaceName = nil
     self.endPlaceName = nil

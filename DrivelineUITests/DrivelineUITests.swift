@@ -11,15 +11,12 @@ final class DrivelineUITests: BaseXCTestCase {
   
   @MainActor
   func testNoDrivesEmptyScreen() throws {
-    // Navigation title
     XCTAssertTrue(app.navigationBars["Drives"].waitForExistence(timeout: 5))
     
-    // Empty state
     XCTAssertTrue(app.staticTexts["No Drives"].waitForExistence(timeout: 5))
     XCTAssertTrue(app.staticTexts["Your recorded drives will appear here."].exists)
     
-    // Record button
-    XCTAssertTrue(app.buttons["Start a new drive"].exists)
+    XCTAssertTrue(app.buttons["NewDriveButton"].exists)
   }
   
   @MainActor
@@ -44,7 +41,9 @@ final class DrivelineUITests: BaseXCTestCase {
     
     XCTAssertEqual(app.staticTexts["BatteryExplanation"].label, "Running in the background to save battery. Your full drive map appears here when the drive ends.")
 
-    XCTAssertEqual(app.staticTexts["FinishDriveButton"].label, "Finish Drive")
-    app.buttons["stop.fill"].firstMatch.tap()
+    XCTAssertEqual(app.staticTexts["FinishDrive"].label, "Finish Drive")
+    app.buttons["FinishDriveButton"].tap()
+    
+    XCTAssertTrue(app.navigationBars["Drives"].waitForExistence(timeout: 5))
   }
 }

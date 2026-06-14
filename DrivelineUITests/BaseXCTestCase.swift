@@ -32,6 +32,11 @@ class BaseXCTestCase: XCTestCase {
   // MARK: - Helper functions
   
   func navigatePastEmptyState() {
-    app.buttons["Start a new drive"].tap()
+    app.buttons["NewDriveButton"].tap()
+  }
+  
+  func navigateToHomeScreen() {
+    navigatePastEmptyState()
+    app.buttons["FinishDriveButton"].tap()
   }
 }

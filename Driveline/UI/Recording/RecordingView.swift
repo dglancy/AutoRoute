@@ -153,7 +153,8 @@ struct RecordingView: View {
     RecordingControlButton(
       iconName: Icons.Recording.stop,
       label: String(localized: "Finish Drive", comment: "Finish drive button label"),
-      accessibilityIdentifier: "FinishDriveButton",
+      labelAccessibilityIdentifier: "FinishDrive",
+      buttonAccessibilityIdentifier: "FinishDriveButton",
       background: .red,
       iconColor: .white,
       action: viewModel.finishDrive
@@ -178,7 +179,8 @@ private struct RecordingControlButton: View {
 
   let iconName: String
   let label: String
-  let accessibilityIdentifier: String
+  let labelAccessibilityIdentifier: String
+  let buttonAccessibilityIdentifier: String
   let background: Background
   let iconColor: Color
   let action: () -> Void
@@ -207,13 +209,14 @@ private struct RecordingControlButton: View {
       }
       .buttonStyle(.plain)
       .accessibilityLabel(label)
+      .accessibilityIdentifier(buttonAccessibilityIdentifier)
       .dynamicTypeSize(.large ... .xxxLarge)
       
       Text(label)
         .font(.footnote)
         .foregroundStyle(Color(.secondaryLabel))
         .accessibilityHidden(true)
-        .accessibilityIdentifier(accessibilityIdentifier)
+        .accessibilityIdentifier(labelAccessibilityIdentifier)
         .dynamicTypeSize(.large ... .accessibility2)
     }
   }

@@ -215,6 +215,7 @@ struct HomeView: View {
       }
       .buttonStyle(.plain)
       .accessibilityLabel(String(localized: "Start a new drive", comment: "Record button when idle"))
+      .accessibilityIdentifier("NewDriveButton")
     }
   }
 }

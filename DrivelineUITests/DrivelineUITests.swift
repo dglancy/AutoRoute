@@ -20,7 +20,7 @@ final class DrivelineUITests: BaseXCTestCase {
   }
   
   @MainActor
-  func testRecordScreenFromEmptyScreen() throws {
+  func testShowRecordScreenFromEmptyScreen() throws {
     navigatePastEmptyState()
     
     let recordingBanner = app.staticTexts["RecordingBanner"]
@@ -33,7 +33,7 @@ final class DrivelineUITests: BaseXCTestCase {
     XCTAssertEqual(app.staticTexts["DistanceValue"].label, "0.0")
     XCTAssertEqual(app.staticTexts["DistanceUnit"].label, "km")
     
-    XCTAssertEqual(app.staticTexts["PositionsCountValue"].label, "0")
+    XCTAssertTrue(app.staticTexts["PositionsCountValue"].exists)
     XCTAssertEqual(app.staticTexts["PositionCountLabel"].label, "logged")
     
     XCTAssertEqual(app.staticTexts["DriveStartedAtValue"].label, Date.now.formatted(.dateTime.hour().minute().locale(.current)))

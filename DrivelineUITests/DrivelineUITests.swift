@@ -46,4 +46,10 @@ final class DrivelineUITests: BaseXCTestCase {
     
     XCTAssertTrue(app.navigationBars["Drives"].waitForExistence(timeout: 5))
   }
+  
+  @MainActor
+  func testHomeScreen() throws {
+    navigateToHomeScreen()
+    
+  }
 }
